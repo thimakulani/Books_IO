@@ -21,6 +21,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/book_isbn_no"
             />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -42,6 +43,7 @@
         <com.google.android.material.textfield.TextInputEditText
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:id="@+id/book_title" 
         />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -54,6 +56,7 @@
         <com.google.android.material.textfield.TextInputEditText
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+            android:id="@+id/book_edition"
         />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -66,9 +69,10 @@
         <com.google.android.material.textfield.TextInputEditText
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:id="@+id/book_author"
         />
 
-    </com.google.android.material.textfield.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>     
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,14 +82,46 @@
         <com.google.android.material.textfield.TextInputEditText
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:id="@+id/book_price"
         />
 
     </com.google.android.material.textfield.TextInputLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+    >
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="false"
+            android:id="@+id/btn_attachement"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            
+        />
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/book_attachement"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/btn_attachement"
+            android:layout_toStartOf="@+id/btn_remove_attachement"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_remove_attachement" 
+            android:layout_alignParentEnd="true"
+            />
+        
+
+    </RelativeLayout>
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:id="@+id/btn_search_isbn"
+        android:id="@+id/btn_add_book"
         android:layout_centerVertical="true"
         android:layout_margin="10dp"
     />

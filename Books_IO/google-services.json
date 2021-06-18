@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "814511446978",
+    "firebase_url": "https://main-event-ce70c.firebaseio.com",
+    "project_id": "main-event-ce70c",
+    "storage_bucket": "main-event-ce70c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814511446978:android:218fd75ed4a823b2ae945b",
+        "android_client_info": {
+          "package_name": "com.books_io.books_io"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814511446978-4urnu0eq87va54jan7gvh5rpd9ebi2ph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYcos-OFl5Pql2yiIZrASbeBTyqYZ-a_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814511446978-4urnu0eq87va54jan7gvh5rpd9ebi2ph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
