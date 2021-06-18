@@ -1,7 +1,9 @@
 ﻿using Android.Views;
 using AndroidX.RecyclerView.Widget;
+using Books_IO.Models;
 using Google.Android.Material.TextView;
 using System;
+using System.Collections.Generic;
 
 namespace Books_IO.Adapters
 {
@@ -9,9 +11,9 @@ namespace Books_IO.Adapters
     {
         public event EventHandler<ListingAdapterClickEventArgs> ItemClick;
         public event EventHandler<ListingAdapterClickEventArgs> ItemLongClick;
-        string[] items;
+        private readonly List<Books> items = new List<Books>();
 
-        public ListingAdapter(string[] data)
+        public ListingAdapter(List<Books> data)
         {
             items = data;
         }
@@ -40,7 +42,7 @@ namespace Books_IO.Adapters
             //holder.TextView.Text = items[position];
         }
 
-        public override int ItemCount => items.Length;
+        public override int ItemCount => items.Count;
 
         void OnClick(ListingAdapterClickEventArgs args) => ItemClick?.Invoke(this, args);
         void OnLongClick(ListingAdapterClickEventArgs args) => ItemLongClick?.Invoke(this, args);

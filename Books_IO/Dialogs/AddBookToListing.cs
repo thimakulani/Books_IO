@@ -9,6 +9,9 @@ using Google.Android.Material.TextView;
 using System;
 using System.Net;
 using Newtonsoft.Json;
+using Plugin.Media;
+using Android.Graphics;
+
 namespace Books_IO.Dialogs
 {
     public class AddBookToListing : DialogFragment
@@ -96,6 +99,40 @@ namespace Books_IO.Dialogs
                     authors = a;
                 }
                 book_author.Text = authors;
+
+            }
+            catch (Exception ex)
+            {
+                Toast.MakeText(context, ex.Message, ToastLength.Long).Show();
+            }
+
+        }
+       // StorageReference storageRef;
+        private byte[] imageArray;
+
+        private async void ChosePicture()
+        {
+            await CrossMedia.Current.Initialize();
+            if (!CrossMedia.Current.IsPickPhotoSupported)
+            {
+                Toast.MakeText(Android.App.Application.Context, "Upload not supported on this device", ToastLength.Short).Show();
+                return;
+            }
+            try
+            {
+                var file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
+                {
+                    PhotoSize = Plugin.Media.Abstractions.PhotoSize.Full,
+                    CompressionQuality = 40,
+
+                });
+                imageArray = System.IO.File.ReadAllBytes(file.Path);
+
+                if (imageArray != null)
+                {
+                    Android.Graphics.Bitmap bmp = BitmapFactory.DecodeByteArray(imageArray, 0, imageArray.Length);
+                    //ImgAwareness.SetImageBitmap(bmp);
+                }
 
             }
             catch (Exception ex)
