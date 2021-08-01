@@ -7,10 +7,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Material.SearchView"
+        android:id="@+id/input_search"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recycler_books_list"
+        android:layout_below="@+id/input_search"
+        android:layout_marginTop="5dp"
         />
 
 
@@ -21,7 +30,11 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
         android:id="@+id/fab_add_book"
-
+        app:backgroundTint="@color/colorPrimary"
+        android:text="@string/txt_add_book"
+        android:textColor="@color/color_white"
+        android:textAlignment="center"
+        app:elevation="5dp"
     />
 
 </RelativeLayout>

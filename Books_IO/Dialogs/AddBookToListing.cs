@@ -11,10 +11,16 @@ using System.Net;
 using Newtonsoft.Json;
 using Plugin.Media;
 using Android.Graphics;
+using System.Collections.Generic;
+using Plugin.CloudFirestore;
+using Firebase.Storage;
+using Android.Gms.Tasks;
+using Firebase.Auth;
+using ID.IonBit.IonAlertLib;
 
 namespace Books_IO.Dialogs
 {
-    public class AddBookToListing : DialogFragment
+    public class AddBookToListing : DialogFragment, IOnSuccessListener, IOnCompleteListener, IOnFailureListener
     {
         public override void OnCreate(Bundle savedInstanceState)
         {
@@ -38,7 +44,7 @@ namespace Books_IO.Dialogs
             // Use this to return your custom view for this Fragment
             // return inflater.Inflate(Resource.Layout.YourFragment, container, false);
 
-            View view = inflater.Inflate(Resource.Layout.dislog_add_listing, container, false);
+            View view = inflater.Inflate(Resource.Layout.dialog_add_listing, container, false);
             ConnectViews(view);
             return view;
         }
@@ -52,6 +58,7 @@ namespace Books_IO.Dialogs
             btn_remove_attachement = view.FindViewById<MaterialButton>(Resource.Id.btn_remove_attachement);
 
             txt_attachment = view.FindViewById<MaterialTextView>(Resource.Id.book_attachement);
+            txt_attachment.Text = "No Image";
 
             book_isbn_no = view.FindViewById<TextInputEditText>(Resource.Id.book_isbn_no);
             book_title = view.FindViewById<TextInputEditText>(Resource.Id.book_title);
@@ -61,14 +68,69 @@ namespace Books_IO.Dialogs
        //     book_isbn_no = view.FindViewById<TextInputEditText>(Resource.Id.book_isbn_no);
 
             btn_search_isbn.Click += Btn_search_isbn_Click;
-
+            btn_add_book.Click += Btn_add_book_Click;
             btn_attachement.Click += Btn_attachement_Click;
+            btn_remove_attachement.Click += Btn_remove_attachement_Click;
+
+        }
+
+        private void Btn_remove_attachement_Click(object sender, EventArgs e)
+        {
+            imageArray = null;
+            txt_attachment.Text = "No Image";
+        }
+
+        IDocumentReference query;
+        StorageReference storage_ref;
+        IonAlert loadingDialog;
+        private async  void Btn_add_book_Click(object sender, EventArgs e)
+        {
+            loadingDialog = new IonAlert(context, IonAlert.ProgressType);
+            loadingDialog.SetSpinKit("DoubleBounce")
+                .SetSpinColor("#008D91")
+                .ShowCancelButton(false)
+                .Show();
+
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("Title", book_title.Text);
+            data.Add("Edition", book_edition.Text);
+            data.Add("ISBN", book_isbn_no.Text);
+            data.Add("Author", book_author.Text);
+            data.Add("ImageUrl", null);
+            data.Add("Status", "Pending");
+            data.Add("FacultyId", null);
+            data.Add("Price", book_price.Text);
+            data.Add("Student_Id", FirebaseAuth.Instance.Uid);
+            data.Add("TimeStamp", FieldValue.ServerTimestamp);
+
+            query = await CrossCloudFirestore
+                .Current
+                .Instance
+                .Collection("BooksListings")
+                .AddAsync(data);
+            Toast.MakeText(context, query.Id, ToastLength.Long).Show();
+            if (imageArray != null)
+            {
+                storage_ref = FirebaseStorage
+                    .Instance
+                    .GetReference("Images").Child(query.Id);
+                storage_ref.PutBytes(imageArray)
+                    .AddOnSuccessListener(this)
+                    .AddOnFailureListener(this)
+                    .AddOnCompleteListener(this);
+                    
+            }
+            else
+            {
+                loadingDialog.Dismiss();
+                Dismiss();
+            }
 
         }
 
         private void Btn_attachement_Click(object sender, EventArgs e)
         {
-            
+            ChosePicture();
         }
 
         private void Btn_search_isbn_Click(object sender, EventArgs e)
@@ -115,7 +177,7 @@ namespace Books_IO.Dialogs
             await CrossMedia.Current.Initialize();
             if (!CrossMedia.Current.IsPickPhotoSupported)
             {
-                Toast.MakeText(Android.App.Application.Context, "Upload not supported on this device", ToastLength.Short).Show();
+                Toast.MakeText(context, "Upload not supported on this device", ToastLength.Short).Show();
                 return;
             }
             try
@@ -123,15 +185,19 @@ namespace Books_IO.Dialogs
                 var file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
                 {
                     PhotoSize = Plugin.Media.Abstractions.PhotoSize.Full,
-                    CompressionQuality = 40,
+                    CompressionQuality = 50,
+                    CustomPhotoSize = 100,
+                    
 
                 });
                 imageArray = System.IO.File.ReadAllBytes(file.Path);
 
                 if (imageArray != null)
                 {
-                    Android.Graphics.Bitmap bmp = BitmapFactory.DecodeByteArray(imageArray, 0, imageArray.Length);
+                    //Bitmap bmp = BitmapFactory.DecodeByteArray(imageArray, 0, imageArray.Length);
                     //ImgAwareness.SetImageBitmap(bmp);
+                    txt_attachment.Text = "Image selected";
+
                 }
 
             }
@@ -146,6 +212,31 @@ namespace Books_IO.Dialogs
         {
             base.OnStart();
             Dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
+        }
+
+        public async void OnSuccess(Java.Lang.Object result)
+        {
+            if(storage_ref != null)
+            {
+                var url = await storage_ref.GetDownloadUrlAsync();
+                if(url != null)
+                {
+                    //Toast.MakeText(context, url.ToString(), ToastLength.Long).Show();
+                    await query.UpdateAsync("ImageUrl", url.ToString());
+                }
+            }
+        }
+
+        public void OnComplete(Task task)
+        {
+            loadingDialog.Dismiss();
+            Dismiss();
+        }
+
+        public void OnFailure(Java.Lang.Exception e)
+        {
+            AndroidHUD.AndHUD.Shared.ShowSuccess(context, e.Message, AndroidHUD.MaskType.Clear, TimeSpan.FromSeconds(2));
+            query.DeleteAsync();
         }
     }
 }

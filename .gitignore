@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Admin/Assets/ServiceAccount.json
+/Admin/google-services.json
+/Books_IO/Assets/ServiceAccount.json

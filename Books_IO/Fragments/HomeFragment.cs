@@ -2,6 +2,7 @@
 using Android.Views;
 using AndroidX.Fragment.App;
 using AndroidX.RecyclerView.Widget;
+using AndroidX.ViewPager.Widget;
 using Books_IO.Adapters;
 using Books_IO.Dialogs;
 using Books_IO.Models;
@@ -46,7 +47,7 @@ namespace Books_IO.Fragments
                 .Current
                 .Instance
                 .Collection("BooksListings")
-                .WhereEqualsTo("status", "available")
+                .WhereEqualsTo("Status", "Approved")
                 .AddSnapshotListener((values, error) =>
                 {
                     if (!values.IsEmpty)
@@ -89,4 +90,5 @@ namespace Books_IO.Fragments
             dlg.Show(ChildFragmentManager.BeginTransaction(), "");
         }
     }
+ 
 }

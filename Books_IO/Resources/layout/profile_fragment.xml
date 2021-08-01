@@ -104,6 +104,7 @@
         android:layout_alignParentEnd="true"
         android:id="@+id/btn_update"
         android:layout_centerVertical="true"
-        android:layout_margin="10dp"
+        android:layout_margin="15dp"
+        
     />
 </LinearLayout>

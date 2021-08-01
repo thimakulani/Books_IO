@@ -1,4 +1,27 @@
 <resources>
     <string name="app_name">Books_IO</string>
     <string name="action_settings">Settings</string>
+    <string name="txt_book_title">Book Title</string>
+    <string name="txt_book_author">Book Author</string>
+    <string name="txt_book_price">Price</string>
+    <string name="txt_book_edition">Book Edition</string>
+    <string name="txt_add_book">Add Book</string>
+    <string name="txt_book_isbn">ISBN</string>
+    <string name="txt_btn_search_isbn">Search ISBN</string>
+    <string name="txt_add_faculty">Faculty</string>
+    <string name="txt_no_image">No Image</string>
+    <string name="txt_select_image">Select Image</string>
+    <string name="txt_remove">Remove Image</string>
+    <string name="txt_email">Email Address</string>
+    <string name="txt_password">Password</string>
+    <string name="txt_forgot_password">Forgot Password</string>
+    <string name="txt_name">Name</string>
+    <string name="txt_surname">Surname</string>
+    <string name="txt_phone_number">Phone Number</string>
+    <string name="txt_home">Home</string>
+    <string name="txt_profile">Profile</string>
+    <string name="txt_logout">Logout</string>
+    <string name="txt_login">Login</string>
+    <string name="txt_sign_up">Sign up</string>
+    <string name="txt_reserve">Reserve</string>
 </resources>

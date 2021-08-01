@@ -22,6 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/book_isbn_no"
+                android:hint="@string/txt_book_isbn"
             />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -32,6 +33,7 @@
             android:id="@+id/btn_search_isbn"
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
+            android:text="@string/txt_btn_search_isbn"
         />
     </RelativeLayout>
     <com.google.android.material.textfield.TextInputLayout
@@ -98,6 +100,7 @@
             android:id="@+id/btn_attachement"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
+            android:text="@string/txt_select_image"
             
         />
         <com.google.android.material.textview.MaterialTextView
@@ -105,6 +108,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/book_attachement"
             android:layout_centerVertical="true"
+            android:text="@string/txt_no_image"
             android:layout_toEndOf="@+id/btn_attachement"
             android:layout_toStartOf="@+id/btn_remove_attachement"
             />
@@ -113,6 +117,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/btn_remove_attachement" 
             android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"
+            android:layout_centerVertical="true"
+            android:text="@string/txt_remove"
+            android:visibility="gone"
             />
         
 
@@ -124,6 +132,7 @@
         android:id="@+id/btn_add_book"
         android:layout_centerVertical="true"
         android:layout_margin="10dp"
+        android:text="@string/txt_add_book"
     />
    
 </LinearLayout>
