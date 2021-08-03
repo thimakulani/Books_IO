@@ -30,9 +30,21 @@ namespace Books_IO.Activities
         private void Frag_SignupBtnClickHandler(object sender, System.EventArgs e)
         {
             SignUpFragment frag = new SignUpFragment();
+            frag.BackClickHandler += Frag_BackClickHandler;
             SupportFragmentManager.BeginTransaction()
                 .Replace(Resource.Id.login_host, frag)
                     .Commit();
+        }
+
+        private void Frag_BackClickHandler(object sender, System.EventArgs e)
+        {
+            LoginFragment frag = new LoginFragment();
+            frag.LoginSuccessHandler += Frag_LoginSuccessHandler;
+            frag.SignupBtnClickHandler += Frag_SignupBtnClickHandler;
+            SupportFragmentManager
+                .BeginTransaction()
+                .Add(Resource.Id.login_host, frag)
+                .Commit();
         }
 
         private void Frag_LoginSuccessHandler(object sender, LoginFragment.LoginSuccessEventHandler e)

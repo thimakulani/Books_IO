@@ -45,7 +45,8 @@
         <com.google.android.material.textfield.TextInputEditText
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:id="@+id/book_title" 
+           android:id="@+id/book_title"
+            android:hint="@string/txt_book_title"
         />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -59,6 +60,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
             android:id="@+id/book_edition"
+            android:hint="@string/txt_book_edition"
         />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -72,6 +74,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:id="@+id/book_author"
+            android:hint="@string/txt_book_author"
         />
 
     </com.google.android.material.textfield.TextInputLayout>     
@@ -85,6 +88,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:id="@+id/book_price"
+            android:hint="@string/txt_book_price"
         />
 
     </com.google.android.material.textfield.TextInputLayout>

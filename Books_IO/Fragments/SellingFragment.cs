@@ -1,6 +1,7 @@
 ﻿using Android.OS;
 using Android.Views;
 using AndroidX.Fragment.App;
+using System;
 
 namespace Books_IO.Fragments
 {
@@ -16,9 +17,15 @@ namespace Books_IO.Fragments
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             // Use this to return your custom view for this Fragment
-            // return inflater.Inflate(Resource.Layout.YourFragment, container, false);
+            base.OnCreateView(inflater, container, savedInstanceState);
+            View view = inflater.Inflate(Resource.Layout.selling_fragment, container, false);
+            ConnectViews(view);
+            return view;
+        }
 
-            return base.OnCreateView(inflater, container, savedInstanceState);
+        private void ConnectViews(View view)
+        {
+            
         }
     }
 }

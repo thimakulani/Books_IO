@@ -81,7 +81,8 @@ namespace Books_IO.Fragments
 
         private void Adapter_ItemClick(object sender, ListingAdapterClickEventArgs e)
         {
-            
+            ViewBookDlgFragment dlg = new ViewBookDlgFragment(Items[e.Position].Id);
+            dlg.Show(ChildFragmentManager.BeginTransaction(), null);
         }
 
         private void Fab_add_book_Click(object sender, EventArgs e)

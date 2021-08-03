@@ -32,7 +32,7 @@ namespace Books_IO.Dialogs
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
+            SetStyle(StyleNoFrame, Resource.Style.FullScreenDialogStyle);
             // Create your fragment here
         }
         private TextInputEditText book_isbn_no;
@@ -92,6 +92,8 @@ namespace Books_IO.Dialogs
                 .Instance
                 .Collection("Reserved")
                 .Document(FirebaseAuth.Instance.Uid)
+                .Collection("Books")
+                .Document(book_id)
                 .SetAsync(data);
         }
     }

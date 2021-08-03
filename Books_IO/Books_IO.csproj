@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Activities\LoginSignupActivity.cs" />
     <Compile Include="Activities\SplashScreen.cs" />
+    <Compile Include="Adapters\ReserveAdapter.cs" />
     <Compile Include="Adapters\ListingAdapter.cs" />
     <Compile Include="BackgroundWork.cs" />
     <Compile Include="Dialogs\AddBookToListing.cs" />
@@ -314,6 +315,21 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\view_book_fragment.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\reserve_fragment.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\selling_fragment.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\book_reserve_item.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
