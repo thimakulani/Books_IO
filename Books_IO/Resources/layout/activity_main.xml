@@ -4,12 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/appBarLayout1"
+    >
+         <com.google.android.material.appbar.MaterialToolbar
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+            />
 
+    </com.google.android.material.appbar.AppBarLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/fragment_host"
         android:layout_above="@+id/bottom_nav"
+        android:layout_below="@+id/appBarLayout1"
     />
 
 

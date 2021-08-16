@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Activities\LoginSignupActivity.cs" />
     <Compile Include="Activities\SplashScreen.cs" />
+    <Compile Include="Adapters\SellingAdapter.cs" />
     <Compile Include="Adapters\ReserveAdapter.cs" />
     <Compile Include="Adapters\ListingAdapter.cs" />
     <Compile Include="BackgroundWork.cs" />

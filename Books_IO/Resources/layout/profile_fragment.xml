@@ -35,6 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/profile_name"
+                    android:hint="@string/txt_name"
                 />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -48,6 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/profile_lastname"
+                    android:hint="@string/txt_surname"
                 />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -78,6 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/profile_phone"
+                    android:hint="@string/txt_phone_number"
                 />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -92,6 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/profile_email"
+                    android:hint="@string/txt_email"
                 />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -105,6 +109,7 @@
         android:id="@+id/btn_update"
         android:layout_centerVertical="true"
         android:layout_margin="15dp"
+        android:text="@string/common_google_play_services_update_button"
         
     />
 </LinearLayout>

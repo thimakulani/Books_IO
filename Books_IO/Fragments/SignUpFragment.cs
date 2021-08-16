@@ -9,6 +9,7 @@ using Firebase.Auth;
 using Google.Android.Material.AppBar;
 using Google.Android.Material.Button;
 using Google.Android.Material.TextField;
+using ID.IonBit.IonAlertLib;
 using Plugin.CloudFirestore;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ namespace Books_IO.Fragments
             toolbar.NavigationClick += Toolbar_NavigationClick;
             BtnSubmitReg.Click += BtnSubmitReg_Click;
         }
-
+        private IonAlert loadingDialog;
         private void BtnSubmitReg_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(InputName.Text) && string.IsNullOrWhiteSpace(InputName.Text))
@@ -90,6 +91,12 @@ namespace Books_IO.Fragments
                 InputPassword.Error = "provide your password";
                 return;
             }
+            BtnSubmitReg.Enabled = false;
+            loadingDialog = new IonAlert(context, IonAlert.ProgressType);
+            loadingDialog.SetSpinKit("DoubleBounce")
+                .SetSpinColor("#008D91")
+                .ShowCancelButton(false)
+                .Show();
             FirebaseAuth.Instance.CreateUserWithEmailAndPassword(InputEmail.Text.Trim(), InputPassword.Text.Trim())
                      .AddOnSuccessListener(this)
                      .AddOnFailureListener(this)
@@ -131,7 +138,8 @@ namespace Books_IO.Fragments
 
         public void OnComplete(Task task)
         {
-            
+            BtnSubmitReg.Enabled = true;
+            loadingDialog.Dismiss();
         }
     }
 }
