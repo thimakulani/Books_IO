@@ -15,6 +15,7 @@
             app:navigationIconTint="@color/color_white"
             android:id="@+id/view_toolbar"
             
+            
             />
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -3,9 +3,13 @@ using Android.OS;
 using Android.Runtime;
 using AndroidX.AppCompat.App;
 using Books_IO.Fragments;
+using Books_IO.Models;
 using Firebase.Auth;
+using Firebase.Messaging;
+using Google.Android.Material.AppBar;
 using Google.Android.Material.BottomNavigation;
 using IsmaelDiVita.ChipNavigationLib;
+using Plugin.CloudFirestore;
 
 namespace Books_IO
 {
@@ -13,6 +17,7 @@ namespace Books_IO
     public class MainActivity : AppCompatActivity, IsmaelDiVita.ChipNavigationLib.ChipNavigationBar.IOnItemSelectedListener
     {
         private ChipNavigationBar bottom_nav;
+        private MaterialToolbar toolbar;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -28,10 +33,25 @@ namespace Books_IO
             }
 
 
+            toolbar = FindViewById<MaterialToolbar>(Resource.Id.toolbar);
             bottom_nav = FindViewById<ChipNavigationBar>(Resource.Id.bottom_nav);
             bottom_nav.SetMenuResource(Resource.Menu.nav_menu);
             bottom_nav.SetItemSelected(Resource.Id.nav_home);
             bottom_nav.SetOnItemSelectedListener(this);
+            CrossCloudFirestore
+               .Current
+               .Instance
+               .Collection("Students")
+               .Document(FirebaseAuth.Instance.Uid)
+               .AddSnapshotListener((values, errors) =>
+               {
+                   if (values.Exists)
+                   {
+                       Student student = values.ToObject<Student>();
+                       toolbar.Title = $"Welcome {student.Name} {student.Surname}".ToUpper();
+                       FirebaseMessaging.Instance.SubscribeToTopic(FirebaseAuth.Instance.Uid);
+                   }
+               });
 
         }
 
@@ -89,10 +109,7 @@ namespace Books_IO
                     base.Finish();
                 }
             }
-            else
-            {
-
-            }
+            
         }
     }
 }

@@ -8,6 +8,8 @@ using System;
 using Plugin.CloudFirestore;
 using Admin.Models;
 using AndroidHUD;
+using FirebaseAdmin.Messaging;
+using Google.Android.Material.AppBar;
 
 namespace Admin.Dialogs
 {
@@ -26,6 +28,7 @@ namespace Admin.Dialogs
             SetStyle(StyleNoFrame, Resource.Style.FullScreenDialogStyle);
             // Create your fragment here
         }
+        private MaterialToolbar toolbar;
         private TextInputEditText book_isbn_no;
         private TextInputEditText book_title;
         private TextInputEditText book_price;
@@ -57,6 +60,9 @@ namespace Admin.Dialogs
             btn_add_reserve = view.FindViewById<MaterialButton>(Resource.Id.btn_reserve);
             btn_add_reserve.Click += Btn_add_reserve_Click;
             btn_add_reserve.Text = "APPROVE";
+            toolbar = view.FindViewById<MaterialToolbar>(Resource.Id.view_toolbar);
+            toolbar.SetNavigationIcon(Resource.Drawable.ic_arrow_back_white);
+            toolbar.NavigationClick += Toolbar_NavigationClick;
 
             CrossCloudFirestore.Current
                 .Instance
@@ -74,17 +80,42 @@ namespace Admin.Dialogs
                         book_title.Text = books.Title;
                         student_id = books.Student_Id;
                         book_status.Text = books.Status;
+                        student_id = books.Student_Id;
                     }
                 });
+
+
+
         }
 
-        private void Btn_add_reserve_Click(object sender, EventArgs e)
+        private void Toolbar_NavigationClick(object sender, AndroidX.AppCompat.Widget.Toolbar.NavigationClickEventArgs e)
         {
-            CrossCloudFirestore.Current
+            Dismiss();
+        }
+
+        private async void Btn_add_reserve_Click(object sender, EventArgs e)
+        {
+            await CrossCloudFirestore.Current
                 .Instance
                 .Collection("BooksListings")
                 .Document(book_id)
                 .UpdateAsync("Status", "Approved");
+
+
+            var stream = Resources.Assets.Open("service_account.json");
+            var fcm = FirebaseHelper.FirebaseAdminSDK.GetFirebaseMessaging(stream);
+            FirebaseAdmin.Messaging.Message message = new FirebaseAdmin.Messaging.Message()
+            {
+                Topic = student_id,
+                Notification = new Notification()
+                {
+                    Title = "Approved",
+                    Body = $"Your book has been successfully approved.",
+
+                },
+               
+            };
+            await fcm.SendAsync(message);
 
 
             AndHUD.Shared.ShowSuccess(context, "Successfully updated", MaskType.Clear, TimeSpan.FromSeconds(3));

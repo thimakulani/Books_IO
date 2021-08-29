@@ -17,6 +17,7 @@ using Firebase.Storage;
 using Android.Gms.Tasks;
 using Books_IO.Models;
 using Firebase.Auth;
+using Google.Android.Material.AppBar;
 
 namespace Books_IO.Dialogs
 {
@@ -35,6 +36,7 @@ namespace Books_IO.Dialogs
             SetStyle(StyleNoFrame, Resource.Style.FullScreenDialogStyle);
             // Create your fragment here
         }
+        private MaterialToolbar toolbar;
         private TextInputEditText book_isbn_no;
         private TextInputEditText book_title;
         private TextInputEditText book_price;
@@ -65,6 +67,10 @@ namespace Books_IO.Dialogs
             btn_add_reserve.Click += Btn_add_reserve_Click;
 
 
+            toolbar = view.FindViewById<MaterialToolbar>(Resource.Id.view_toolbar);
+            toolbar.SetNavigationIcon(Resource.Drawable.ic_arrow_back_white);
+            toolbar.NavigationClick += Toolbar_NavigationClick;
+
             CrossCloudFirestore.Current
                 .Instance
                 .Collection("BooksListings")
@@ -81,6 +87,11 @@ namespace Books_IO.Dialogs
                         book_price.Text = books.Price;
                     }
                 });
+        }
+
+        private void Toolbar_NavigationClick(object sender, AndroidX.AppCompat.Widget.Toolbar.NavigationClickEventArgs e)
+        {
+            Dismiss();
         }
 
         private void Btn_add_reserve_Click(object sender, EventArgs e)

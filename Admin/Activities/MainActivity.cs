@@ -1,9 +1,12 @@
 ﻿using Admin.Fragments;
+using Admin.Models;
 using Android.App;
 using Android.OS;
 using Android.Runtime;
 using AndroidX.AppCompat.App;
+using Firebase.Auth;
 using IsmaelDiVita.ChipNavigationLib;
+using Plugin.CloudFirestore;
 
 namespace Admin.Activities
 {
@@ -30,6 +33,20 @@ namespace Admin.Activities
             bottom_nav.SetMenuResource(Resource.Menu.nav_menu);
             bottom_nav.SetItemSelected(Resource.Id.nav_home);
             bottom_nav.SetOnItemSelectedListener(this);
+
+
+            CrossCloudFirestore
+             .Current
+             .Instance
+             .Collection("Students")
+             .Document(FirebaseAuth.Instance.Uid)
+             .AddSnapshotListener((values, errors) =>
+             {
+                 if (values.Exists)
+                 {
+                     Student student = values.ToObject<Student>();
+                 }
+             });
 
         }
 

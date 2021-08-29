@@ -2,6 +2,7 @@
 using Android.Gms.Tasks;
 using Android.OS;
 using Android.Views;
+using AndroidHUD;
 using AndroidX.AppCompat.App;
 using AndroidX.Fragment.App;
 using Books_IO.Models;
@@ -134,6 +135,9 @@ namespace Books_IO.Fragments
                 .Collection("Students")
                 .Document(FirebaseAuth.Instance.Uid)
                 .SetAsync(data);
+            AndHUD.Shared.ShowError(context, "Successfully Registered", MaskType.Clear, TimeSpan.FromSeconds(3));
+            Intent intent = new Intent(context, typeof(MainActivity));
+            StartActivity(intent);
         }
 
         public void OnComplete(Task task)

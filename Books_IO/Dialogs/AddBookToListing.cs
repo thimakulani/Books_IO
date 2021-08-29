@@ -85,6 +85,27 @@ namespace Books_IO.Dialogs
         IonAlert loadingDialog;
         private async  void Btn_add_book_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(book_title.Text))
+            {
+                book_title.Error = "Provide Book Title";
+                return;
+            }
+            if (string.IsNullOrEmpty(book_edition.Text))
+            {
+                book_edition.Error = "Provide edition";
+                return;
+            }
+            if (string.IsNullOrEmpty(book_author.Text))
+            {
+                book_author.Error = "Provide Author(s)";
+                return;
+            }
+            if (string.IsNullOrEmpty(book_price.Text))
+            {
+                book_price.Error = "Provide price";
+                return;
+            }
+            
             loadingDialog = new IonAlert(context, IonAlert.ProgressType);
             loadingDialog.SetSpinKit("DoubleBounce")
                 .SetSpinColor("#008D91")
@@ -135,13 +156,19 @@ namespace Books_IO.Dialogs
 
         private void Btn_search_isbn_Click(object sender, EventArgs e)
         {
-            book_isbn_no.Text = "9783319255576";
+            
             if (!string.IsNullOrEmpty(book_isbn_no.Text))
             {
                 var url = new Uri($"https://api.altmetric.com/v1/isbn/{book_isbn_no.Text}");
                 WebClient client = new WebClient();
                 client.DownloadStringAsync(url);
+                
+                
                 client.DownloadStringCompleted += Client_DownloadStringCompleted;
+            }
+            else
+            {
+                book_isbn_no.Error = "Provide ISBN";
             }
         }
 

@@ -54,7 +54,7 @@ namespace Books_IO.Fragments
                             {
                                 case DocumentChangeType.Added:
                                     items.Add(dc.Document.Get<string>("Book_Id"));
-                                    Toast.MakeText(view.Context, dc.Document.Get<string>("Book_Id"), ToastLength.Long).Show();
+                                    //Toast.MakeText(view.Context, dc.Document.Get<string>("Book_Id"), ToastLength.Long).Show();
                                     adapter.NotifyDataSetChanged();
                                     break;
                                 case DocumentChangeType.Modified:
