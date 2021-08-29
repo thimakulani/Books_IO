@@ -12,7 +12,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
   <item android:id="@+id/nav_sell"
       android:title="Selling"
       android:icon="@drawable/ic_addchart_black_18dp"
-      app:cnb_iconColor="#0096fa"
+      app:cnb_iconColor="#008D91"
         />
   <item android:id="@+id/nav_reserved"
       android:title="Reserved"
@@ -22,11 +22,11 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
   <item android:id="@+id/nav_profile"
       android:title="@string/txt_profile"
       android:icon="@drawable/ic_account_circle_black_18dp"
-      app:cnb_iconColor="#0096fa"
+      app:cnb_iconColor="#008D91"
         />
   <item android:id="@+id/nav_logout"
      android:title="@string/txt_logout"
-     android:icon="?android:attr/homeAsUpIndicator"
+     android:icon="@drawable/ic_cancel_black_18dp"
      app:cnb_iconColor="#0096fa"
         />
   

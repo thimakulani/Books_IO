@@ -63,7 +63,32 @@ namespace Admin.Activities
 
         public void OnItemSelected(int id)
         {
-            
+            if(id == Resource.Id.nav_home)
+            {
+                SupportFragmentManager
+                    .BeginTransaction()
+                    .Add(Resource.Id.fragment_host, new HomeFragment())
+                    .Commit();
+            }
+            if (id == Resource.Id.nav_reserved)
+            {
+                SupportFragmentManager
+                    .BeginTransaction()
+                    .Add(Resource.Id.fragment_host, new HomeFragment())
+                    .Commit();
+            }
+            if (id == Resource.Id.nav_logout)
+            {
+                FirebaseAuth.Instance.SignOut();
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+                {
+                    base.FinishAndRemoveTask();
+                }
+                else
+                {
+                    base.Finish();
+                }
+            }
         }
     }
 }

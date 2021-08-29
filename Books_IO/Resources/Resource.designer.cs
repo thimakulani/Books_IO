@@ -13833,7 +13833,10 @@ namespace Books_IO
 			public const int txt_sign_up = 2131689658;
 			
 			// aapt resource value: 0x7F0F00BB
-			public const int txt_surname = 2131689659;
+			public const int txt_sold = 2131689659;
+			
+			// aapt resource value: 0x7F0F00BC
+			public const int txt_surname = 2131689660;
 			
 			static String()
 			{
