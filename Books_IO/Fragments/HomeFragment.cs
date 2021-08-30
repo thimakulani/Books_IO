@@ -96,8 +96,8 @@ namespace Books_IO.Fragments
         private void Fab_add_book_Click(object sender, EventArgs e)
         {
             PopupMenu popupMenu = new PopupMenu(context, fab_add_book);
-            popupMenu.Menu.Add(IMenu.None, 0, 1, "Soft-copy");
-            popupMenu.Menu.Add(IMenu.None, 1, 1, "Hardcopy");
+            popupMenu.Menu.Add(IMenu.None, 0, 1, "Hardcopy");
+            popupMenu.Menu.Add(IMenu.None, 1, 1, "Soft-copy");
             popupMenu.Show();
             popupMenu.MenuItemClick += (e, x) =>
             {
