@@ -5,20 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 >
-    <com.google.android.material.appbar.MaterialToolbar
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:padding="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:id="@+id/toolbar1"
-        android:elevation="0dp"
+   <com.google.android.material.appbar.MaterialToolbar
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
         android:background="@color/color_orange"
-    />
+        android:id="@id/appBarLayout1"
+        android:elevation="0dp"
+   >
+       <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar1"
+            android:elevation="0dp"
+        />
+    </com.google.android.material.appbar.MaterialToolbar>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar1"
+        android:layout_below="@id/appBarLayout1"
     >
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,6 +100,23 @@
                         android:id="@+id/RegisterInputLastName"
                         android:inputType="textPersonName"
                         android:hint="@string/txt_surname"
+                    />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/txt_student_number"
+                        android:inputType="number"
+                        android:id="@+id/RegisterInputStudentNumber"
                     />
                 </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout

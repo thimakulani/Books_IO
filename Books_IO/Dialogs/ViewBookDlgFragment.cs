@@ -18,6 +18,7 @@ using Android.Gms.Tasks;
 using Books_IO.Models;
 using Firebase.Auth;
 using Google.Android.Material.AppBar;
+using AndroidHUD;
 
 namespace Books_IO.Dialogs
 {
@@ -85,6 +86,21 @@ namespace Books_IO.Dialogs
                         book_isbn_no.Text = books.ISBN;
                         book_title.Text = books.Title;
                         book_price.Text = books.Price;
+
+                        CrossCloudFirestore
+                            .Current
+                            .Instance
+                            .Collection("Reserved")
+                            .Document(FirebaseAuth.Instance.Uid)
+                            .Collection("Books")
+                            .Document(book_id)
+                            .AddSnapshotListener((value, errors) =>
+                            {
+                                if (value.Exists)
+                                {
+                                    btn_add_reserve.Enabled = false;
+                                }
+                            });
                     }
                 });
         }
@@ -96,9 +112,11 @@ namespace Books_IO.Dialogs
 
         private void Btn_add_reserve_Click(object sender, EventArgs e)
         {
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("Book_Id", book_id);
-            data.Add("TimeStamp", FieldValue.ServerTimestamp);
+            Dictionary<string, object> data = new Dictionary<string, object>
+            {
+                { "Book_Id", book_id },
+                { "TimeStamp", FieldValue.ServerTimestamp }
+            };
             CrossCloudFirestore.Current
                 .Instance
                 .Collection("Reserved")
@@ -106,6 +124,7 @@ namespace Books_IO.Dialogs
                 .Collection("Books")
                 .Document(book_id)
                 .SetAsync(data);
+            AndHUD.Shared.ShowSuccess(context, "Successfully reserved", MaskType.Clear, TimeSpan.FromSeconds(3));
         }
     }
 }

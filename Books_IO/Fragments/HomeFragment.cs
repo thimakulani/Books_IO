@@ -1,13 +1,13 @@
-﻿using Android.OS;
+﻿using Android.Content;
+using Android.OS;
 using Android.Views;
+using AndroidX.AppCompat.Widget;
 using AndroidX.Fragment.App;
 using AndroidX.RecyclerView.Widget;
-using AndroidX.ViewPager.Widget;
 using Books_IO.Adapters;
 using Books_IO.Dialogs;
 using Books_IO.Models;
 using Google.Android.Material.FloatingActionButton;
-using Java.Util;
 using Plugin.CloudFirestore;
 using System;
 using System.Collections.Generic;
@@ -33,16 +33,18 @@ namespace Books_IO.Fragments
         }
         private ExtendedFloatingActionButton fab_add_book;
         private readonly List<Books> Items = new List<Books>();
+        private Context context;
         private void ConnectViews(View view)
         {
+            context = view.Context;
             fab_add_book = view.FindViewById<ExtendedFloatingActionButton>(Resource.Id.fab_add_book);
             RecyclerView recycler_books_list = view.FindViewById<RecyclerView>(Resource.Id.recycler_books_list);
-
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.Context);
             ListingAdapter adapter = new ListingAdapter(Items);
             recycler_books_list.SetLayoutManager(linearLayoutManager);
             recycler_books_list.SetAdapter(adapter);
             adapter.ItemClick += Adapter_ItemClick;
+            adapter.DownloadClick += Adapter_DownloadClick;
             CrossCloudFirestore
                 .Current
                 .Instance
@@ -79,6 +81,12 @@ namespace Books_IO.Fragments
             fab_add_book.Click += Fab_add_book_Click;
         }
 
+        private void Adapter_DownloadClick(object sender, ListingAdapterClickEventArgs e)
+        {
+            string url = Items[e.Position].ImageUrl;
+
+        }
+
         private void Adapter_ItemClick(object sender, ListingAdapterClickEventArgs e)
         {
             ViewBookDlgFragment dlg = new ViewBookDlgFragment(Items[e.Position].Id);
@@ -87,8 +95,25 @@ namespace Books_IO.Fragments
 
         private void Fab_add_book_Click(object sender, EventArgs e)
         {
-            AddBookToListing dlg = new AddBookToListing();
-            dlg.Show(ChildFragmentManager.BeginTransaction(), "");
+            PopupMenu popupMenu = new PopupMenu(context, fab_add_book);
+            popupMenu.Menu.Add(IMenu.None, 0, 1, "Soft-copy");
+            popupMenu.Menu.Add(IMenu.None, 1, 1, "Hardcopy");
+            popupMenu.Show();
+            popupMenu.MenuItemClick += (e, x) =>
+            {
+                if (x.Item.ItemId == 0)
+                {
+                    AddBookToListing dlg = new AddBookToListing(x.Item.ItemId);
+                    dlg.Show(ChildFragmentManager.BeginTransaction(), "");
+                }
+                if (x.Item.ItemId == 1)
+                {
+                    AddBookToListing dlg = new AddBookToListing(x.Item.ItemId);
+                    dlg.Show(ChildFragmentManager.BeginTransaction(), "");
+                }
+            };
+
+            
         }
     }
  

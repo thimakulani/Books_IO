@@ -15,6 +15,7 @@ namespace Books_IO.Models
     public class Books
     {
         public string Title { get; set; }
+        public string FileType { get; set; }
         public string Edition { get; set; } 
         public string ISBN { get; set; }
         public string Author { get; set; }

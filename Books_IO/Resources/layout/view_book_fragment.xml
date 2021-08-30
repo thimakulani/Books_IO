@@ -32,6 +32,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/txt_book_isbn"
             android:id="@+id/view_book_isbn"
+            android:enabled="false"
             />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
@@ -45,6 +46,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:hint="@string/txt_book_title"
             android:id="@+id/view_book_title"
             />
@@ -61,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/txt_book_author"
+            android:enabled="false"
             android:id="@+id/view_book_author"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -76,6 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/txt_book_edition"
+            android:enabled="false"
             android:id="@+id/view_book_edition"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -91,7 +95,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/txt_book_price"
+            android:enabled="false"
             android:id="@+id/view_book_price"
+            app:prefixText="@string/item_currency"
+            
             />
     </com.google.android.material.textfield.TextInputLayout>
 

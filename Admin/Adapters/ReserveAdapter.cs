@@ -29,7 +29,7 @@ namespace Admin.Adapters
 
             //Setup your layout here
             View itemView = null;
-            var id = Resource.Layout.book_reserve_item;
+            var id = Resource.Layout.item_book_reserve;
             itemView = LayoutInflater.From(parent.Context).
                    Inflate(id, parent, false);
 
@@ -40,8 +40,11 @@ namespace Admin.Adapters
         // Replace the contents of a view (invoked by the layout manager)
         public override void OnBindViewHolder(RecyclerView.ViewHolder viewHolder, int position)
         {
-
+            //var book = items[position];
             var holder = viewHolder as ReserveAdapterViewHolder;
+
+
+            
             CrossCloudFirestore
                 .Current
                 .Instance
@@ -63,6 +66,14 @@ namespace Admin.Adapters
                             .DownSampleInDip(250, 250)
                             .FadeAnimation(true, true, 300)
                             .IntoAsync(holder.Img);
+                        if(book.Status == "Sold")
+                        {
+                            holder.BtnRemoveBook.Enabled = false;
+                        }
+                        else
+                        {
+                            holder.BtnRemoveBook.Enabled = true;
+                        }
                     }
                 });
         }

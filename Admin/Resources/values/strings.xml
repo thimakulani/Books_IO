@@ -9,6 +9,7 @@
   <string name="txt_add_book">Add Book</string>
   <string name="txt_book_isbn">ISBN</string>
   <string name="txt_btn_search_isbn">Search ISBN</string>
+  <string name="txt_btn_search_student_no">Search</string>
   <string name="txt_add_faculty">Faculty</string>
   <string name="txt_no_image">No Image</string>
   <string name="txt_select_image">Select Image</string>
@@ -25,4 +26,6 @@
   <string name="txt_login">Login</string>
   <string name="txt_sign_up">Sign up</string>
   <string name="txt_reserve">Reserve</string>
+  <string name="txt_sold">Sold</string>
+  <string name="txt_student_number">Student No/Id</string>
 </resources>

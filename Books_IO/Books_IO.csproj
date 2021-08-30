@@ -70,6 +70,7 @@
     <Compile Include="Adapters\ListingAdapter.cs" />
     <Compile Include="BackgroundWork.cs" />
     <Compile Include="Dialogs\AddBookToListing.cs" />
+    <Compile Include="Dialogs\AddSoftcopyDlgFragment.cs" />
     <Compile Include="Dialogs\ResetPasswordDlgFragment.cs" />
     <Compile Include="Dialogs\ViewBookDlgFragment.cs" />
     <Compile Include="FirebaseHelper\FirebaseAdminSDK.cs" />
@@ -133,6 +134,9 @@
     </PackageReference>
     <PackageReference Include="Karamunting.Android.Oktavianto.IonAlert">
       <Version>1.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="PDFTron.Android.Tools">
+      <Version>9.0.2</Version>
     </PackageReference>
     <PackageReference Include="Plugin.CloudFirestore">
       <Version>4.1.0</Version>

@@ -1,7 +1,18 @@
-﻿using Android.OS;
+﻿using Admin.Adapters;
+using Admin.Models;
+using Android.Content;
+using Android.OS;
 using Android.Views;
+using AndroidHUD;
 using AndroidX.Fragment.App;
 using AndroidX.RecyclerView.Widget;
+using Firebase.Auth;
+using FirebaseAdmin.Messaging;
+using Google.Android.Material.Button;
+using Google.Android.Material.TextField;
+using Google.Android.Material.TextView;
+using Plugin.CloudFirestore;
+using System;
 using System.Collections.Generic;
 
 namespace Admin.Fragments
@@ -22,48 +33,135 @@ namespace Admin.Fragments
             ConnectViews(view);
             return view;
         }
-        private readonly List<string> items = new List<string>();
+        private Context context;
+        private List<string> items = new List<string>();
+        private MaterialButton BtnSearchStudentId;
+        private TextInputEditText InputStudentNo;
+        private RecyclerView recycler;
+        private MaterialTextView txt_total_count;
         private void ConnectViews(View view)
         {
-            RecyclerView recycler = view.FindViewById<RecyclerView>(Resource.Id.recycler_reserve);
+            context = view.Context;
+            txt_total_count = view.FindViewById<MaterialTextView>(Resource.Id.txt_total_count);
+            recycler = view.FindViewById<RecyclerView>(Resource.Id.recycler_reserve);
+            BtnSearchStudentId = view.FindViewById<MaterialButton>(Resource.Id.btn_search_student_no);
+            InputStudentNo = view.FindViewById<TextInputEditText>(Resource.Id.InputStudentNo);
             recycler.SetLayoutManager(new LinearLayoutManager(view.Context));
-            ReserveAdapter adapter = new ReserveAdapter(items);
-            recycler.SetAdapter(adapter);
-            adapter.NotifyDataSetChanged();
-            adapter.BtnClick += Adapter_BtnClick;
-            CrossCloudFirestore
-                .Current
-                .Instance
-                .Collection("Reserved")
-                .Document(FirebaseAuth.Instance.Uid)
-                .Collection("Books")
-                .AddSnapshotListener((values, error) =>
-                {
+            txt_total_count.Text = $"TOTAL BOOKS: {0}";
+            //ReserveAdapter adapter;//= new ReserveAdapter(items);
+            //recycler.SetAdapter(adapter);
+            //adapter.NotifyDataSetChanged();
+            // adapter.BtnClick += Adapter_BtnClick;
+            BtnSearchStudentId.Click += BtnSearchStudentId_Click;
 
-                    if (!values.IsEmpty)
+
+            //CrossCloudFirestore
+            //    .Current
+            //    .Instance
+            //    .Collection("Reserved")
+            //    .Document(FieldPath.DocumentId.ToString())
+            //    .Collection("Books")
+            //    .AddSnapshotListener((values, error) =>
+            //    {
+
+            //        if (!values.IsEmpty)
+            //        {
+            //            foreach (var dc in values.DocumentChanges)
+            //            {
+            //                switch (dc.Type)
+            //                {
+            //                    case DocumentChangeType.Added:
+            //                        items.Add(dc.Document.Get<string>("Book_Id"));
+            //                        //Toast.MakeText(view.Context, dc.Document.Get<string>("Book_Id"), ToastLength.Long).Show();
+            //                        adapter.NotifyDataSetChanged();
+            //                        break;
+            //                    case DocumentChangeType.Modified:
+            //                        break;
+            //                    case DocumentChangeType.Removed:
+            //                        items.RemoveAt(dc.OldIndex);
+            //                        adapter.NotifyDataSetChanged();
+            //                        break;
+            //                    default:
+            //                        break;
+            //                }
+            //            }
+            //        }
+            //    });
+        }
+        private string student_id = null;
+        private int counter = 0;
+        private async void BtnSearchStudentId_Click(object sender, System.EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(InputStudentNo.Text))
+            {
+                var query = await CrossCloudFirestore.Current
+                    .Instance
+                    .Collection("Students")
+                    .Document(InputStudentNo.Text.Trim()).GetAsync();
+
+                if (query.Exists)
+                {
+                    
+                    Student student = new Student();
+                    student = query.ToObject<Student>();
+                    student_id = student.Id;
+                    var data = await CrossCloudFirestore
+                        .Current
+                        .Instance
+                        .Collection("Reserved")
+                        .Document(student.Id)
+                        .Collection("Books")
+                        .GetAsync();
+                    counter = 0;
+                    if (!data.IsEmpty)
                     {
-                        foreach (var dc in values.DocumentChanges)
+                        
+                        foreach (var item in data.Documents)
                         {
-                            switch (dc.Type)
-                            {
-                                case DocumentChangeType.Added:
-                                    items.Add(dc.Document.Get<string>("Book_Id"));
-                                    //Toast.MakeText(view.Context, dc.Document.Get<string>("Book_Id"), ToastLength.Long).Show();
-                                    adapter.NotifyDataSetChanged();
-                                    break;
-                                case DocumentChangeType.Modified:
-                                    break;
-                                case DocumentChangeType.Removed:
-                                    items.RemoveAt(dc.OldIndex);
-                                    adapter.NotifyDataSetChanged();
-                                    break;
-                                default:
-                                    break;
-                            }
+                            items.Add(item.Id);
+                            counter++;
                         }
+                        
                     }
-                });
+                    else
+                    {
+                        AndHUD.Shared.ShowError(context, "Book not found in reservation", MaskType.Clear, TimeSpan.FromSeconds(3));
+                    }
+                    txt_total_count.Text = $"TOTAL BOOKS: {counter}";
+                    ReserveAdapter adapter = new ReserveAdapter(items);
+                    recycler.SetAdapter(adapter);
+                    adapter.NotifyDataSetChanged();
+                    adapter.BtnClick += Adapter_BtnClick;
+                }
+            }
         }
 
+        private async void Adapter_BtnClick(object sender, ReserveAdapterClickEventArgs e)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("Status", "Sold");
+            await CrossCloudFirestore
+                .Current
+                .Instance
+                .Collection("BooksListings")
+                .Document(items[e.Position])
+                .UpdateAsync(data);
+
+            var stream = Resources.Assets.Open("ServiceAccount.json");
+            var fcm = FirebaseHelper.FirebaseAdminSDK.GetFirebaseMessaging(stream);
+            FirebaseAdmin.Messaging.Message message = new FirebaseAdmin.Messaging.Message()
+            {
+                Topic = student_id,
+                Notification = new Notification()
+                {
+                    Title = "Sold",
+                    Body = $"Your book has been successfully sold please come collect your parcel.",
+
+                },
+
+            };
+            await fcm.SendAsync(message);
+            AndHUD.Shared.ShowSuccess(context, "Successfully sold", MaskType.Clear, TimeSpan.FromSeconds(3));
+        }
     }
 }

@@ -67,14 +67,14 @@ namespace Admin.Activities
             {
                 SupportFragmentManager
                     .BeginTransaction()
-                    .Add(Resource.Id.fragment_host, new HomeFragment())
+                    .Replace(Resource.Id.fragment_host, new HomeFragment())
                     .Commit();
             }
             if (id == Resource.Id.nav_reserved)
             {
                 SupportFragmentManager
                     .BeginTransaction()
-                    .Add(Resource.Id.fragment_host, new HomeFragment())
+                    .Replace(Resource.Id.fragment_host, new ReserveBooksFragment())
                     .Commit();
             }
             if (id == Resource.Id.nav_logout)

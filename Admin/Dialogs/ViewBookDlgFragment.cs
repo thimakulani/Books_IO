@@ -102,7 +102,7 @@ namespace Admin.Dialogs
                 .UpdateAsync("Status", "Approved");
 
 
-            var stream = Resources.Assets.Open("service_account.json");
+            var stream = Resources.Assets.Open("ServiceAccount.json");
             var fcm = FirebaseHelper.FirebaseAdminSDK.GetFirebaseMessaging(stream);
             FirebaseAdmin.Messaging.Message message = new FirebaseAdmin.Messaging.Message()
             {

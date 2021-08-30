@@ -17,45 +17,41 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:id="@+id/book_item_image"
+            android:id="@+id/reserve_book_item_image"
             android:scaleType="centerCrop"
         />
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/book_item_title"
+            android:id="@+id/reserve_book_item_title"
             android:layout_margin="7dp"
             />
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="7dp"
-            android:id="@+id/book_item_author"
+            android:id="@+id/reserve_book_item_author"
             />
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="7dp"
-            android:id="@+id/book_item_addition"
+            android:id="@+id/reserve_book_item_addition"
             />
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="7dp"
-            android:id="@+id/book_item_price"
-            />
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="7dp"
-            android:id="@+id/book_item_status"
+            android:id="@+id/reserve_book_item_price"
             />
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_download_pdf"
-            android:text="@string/txt_download"
-        />
+            android:layout_margin="7dp"
+            android:layout_gravity="end"
+            android:id="@+id/btn_remove_book"
+            android:text="@string/txt_sold"
+            />
     </LinearLayout>
     
 

@@ -7,6 +7,7 @@ using AndroidX.AppCompat.App;
 using AndroidX.Fragment.App;
 using Books_IO.Models;
 using Firebase.Auth;
+using FirebaseAdmin.Auth;
 using Google.Android.Material.AppBar;
 using Google.Android.Material.Button;
 using Google.Android.Material.TextField;
@@ -22,6 +23,7 @@ namespace Books_IO.Fragments
         private MaterialButton BtnSubmitReg;
         //fire base 
 
+        private TextInputEditText InputStudentNumber;
         private TextInputEditText InputName;
         private TextInputEditText InputEmail;
         private TextInputEditText InputSurname;
@@ -47,6 +49,7 @@ namespace Books_IO.Fragments
         private void ConnectViews(View view)
         {
             context = view.Context;
+            InputStudentNumber = view.FindViewById<TextInputEditText>(Resource.Id.RegisterInputStudentNumber);
             InputName = view.FindViewById<TextInputEditText>(Resource.Id.RegisterInputFirstName);
             InputSurname = view.FindViewById<TextInputEditText>(Resource.Id.RegisterInputLastName);
             InputPhone = view.FindViewById<TextInputEditText>(Resource.Id.RegisterInputPhoneNumber);
@@ -59,7 +62,7 @@ namespace Books_IO.Fragments
             BtnSubmitReg.Click += BtnSubmitReg_Click;
         }
         private IonAlert loadingDialog;
-        private void BtnSubmitReg_Click(object sender, EventArgs e)
+        private async void BtnSubmitReg_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(InputName.Text) && string.IsNullOrWhiteSpace(InputName.Text))
             {
@@ -91,6 +94,12 @@ namespace Books_IO.Fragments
                 InputPassword.RequestFocus();
                 InputPassword.Error = "provide your password";
                 return;
+            } 
+            if (string.IsNullOrEmpty(InputStudentNumber.Text) && string.IsNullOrWhiteSpace(InputStudentNumber.Text))
+            {
+                InputStudentNumber.RequestFocus();
+                InputPassword.Error = "provide your id";
+                return;
             }
             BtnSubmitReg.Enabled = false;
             loadingDialog = new IonAlert(context, IonAlert.ProgressType);
@@ -98,10 +107,47 @@ namespace Books_IO.Fragments
                 .SetSpinColor("#008D91")
                 .ShowCancelButton(false)
                 .Show();
-            FirebaseAuth.Instance.CreateUserWithEmailAndPassword(InputEmail.Text.Trim(), InputPassword.Text.Trim())
-                     .AddOnSuccessListener(this)
-                     .AddOnFailureListener(this)
-                     .AddOnCompleteListener(this);
+
+            var stream = Resources.Assets.Open("ServiceAccount.json");
+            var auth = FirebaseHelper.FirebaseAdminSDK.GetFirebaseAdminAuth(stream);
+
+            UserRecordArgs user = new UserRecordArgs()
+            {
+                Email = InputEmail.Text.Trim(),
+                Password = InputPassword.Text.Trim(),
+                Uid = InputStudentNumber.Text.Trim()
+            };
+            try
+            {
+                var results = await auth.CreateUserAsync(user);
+                Dictionary<string, object> data = new Dictionary<string, object>();
+                data.Add("Name", InputName.Text);
+                data.Add("Surname", InputSurname.Text);
+                data.Add("Email", InputEmail.Text);
+                data.Add("StudentId", InputStudentNumber.Text);
+                data.Add("Phone", InputPhone.Text);
+
+                await CrossCloudFirestore
+                    .Current
+                    .Instance
+                    .Collection("Students")
+                    .Document(results.Uid)
+                    .SetAsync(data);
+                AndHUD.Shared.ShowSuccess(context, "Successfully Registered", MaskType.Clear, TimeSpan.FromSeconds(3));
+                BackClickHandler(sender, e);
+            }
+            catch (Exception ex)
+            {
+                AndHUD.Shared.ShowError(context, ex.Message, MaskType.Clear, TimeSpan.FromSeconds(3));
+            }
+            finally
+            {
+                loadingDialog.Dismiss();
+            }
+            //FirebaseAuth.Instance.CreateUserWithEmailAndPassword(InputEmail.Text.Trim(), InputPassword.Text.Trim())
+            //         .AddOnSuccessListener(this)
+            //         .AddOnFailureListener(this)
+            //         .AddOnCompleteListener(this);
         }
 
         public event EventHandler BackClickHandler;
@@ -123,19 +169,7 @@ namespace Books_IO.Fragments
 
         public void OnSuccess(Java.Lang.Object result)
         {
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("Name", InputName.Text);
-            data.Add("Surname", InputSurname.Text);
-            data.Add("Email", InputEmail.Text);
-            data.Add("Phone", InputPhone.Text);
-
-            CrossCloudFirestore
-                .Current
-                .Instance
-                .Collection("Students")
-                .Document(FirebaseAuth.Instance.Uid)
-                .SetAsync(data);
-            AndHUD.Shared.ShowError(context, "Successfully Registered", MaskType.Clear, TimeSpan.FromSeconds(3));
+            
             Intent intent = new Intent(context, typeof(MainActivity));
             StartActivity(intent);
         }

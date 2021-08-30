@@ -26,4 +26,8 @@
     <string name="txt_sign_up">Sign up</string>
     <string name="txt_reserve">Reserve</string>
     <string name="txt_sold">Sold</string>
+    <string name="txt_student_number">Student Number/ID</string>
+    <string name="item_currency">R</string>
+    <string name="txt_download">Download</string>
+    
 </resources>

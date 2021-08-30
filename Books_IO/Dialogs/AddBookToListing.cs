@@ -1,22 +1,30 @@
 ﻿using Android.Content;
+using Android.Gms.Tasks;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using AndroidHUD;
+using AndroidX.AppCompat.App;
 using AndroidX.Fragment.App;
+using Books_IO.Models;
+using Firebase.Auth;
+using Firebase.Storage;
+using FirebaseAdmin.Auth;
+using Google.Android.Material.AppBar;
 using Google.Android.Material.Button;
 using Google.Android.Material.TextField;
 using Google.Android.Material.TextView;
-using System;
-using System.Net;
-using Newtonsoft.Json;
-using Plugin.Media;
-using Android.Graphics;
-using System.Collections.Generic;
-using Plugin.CloudFirestore;
-using Firebase.Storage;
-using Android.Gms.Tasks;
-using Firebase.Auth;
 using ID.IonBit.IonAlertLib;
+using Newtonsoft.Json;
+using Plugin.CloudFirestore;
+using Plugin.Media;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
+using Task = Android.Gms.Tasks.Task;
 
 namespace Books_IO.Dialogs
 {
@@ -39,6 +47,14 @@ namespace Books_IO.Dialogs
         private MaterialButton btn_remove_attachement;
         private MaterialTextView txt_attachment;
         private Context context;
+
+        int item_id;
+
+        public AddBookToListing(int item_id)
+        {
+            this.item_id = item_id;
+        }
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             // Use this to return your custom view for this Fragment
@@ -58,7 +74,17 @@ namespace Books_IO.Dialogs
             btn_remove_attachement = view.FindViewById<MaterialButton>(Resource.Id.btn_remove_attachement);
 
             txt_attachment = view.FindViewById<MaterialTextView>(Resource.Id.book_attachement);
-            txt_attachment.Text = "No Image";
+            if(item_id == 0)
+            {
+                txt_attachment.Text = "No Image";
+                btn_attachement.Text = "SELECT IMAGE";
+            }
+            else
+            {
+                txt_attachment.Text = "No File";
+                btn_attachement.Text = "SELECT FILE";
+
+            }
 
             book_isbn_no = view.FindViewById<TextInputEditText>(Resource.Id.book_isbn_no);
             book_title = view.FindViewById<TextInputEditText>(Resource.Id.book_title);
@@ -79,7 +105,7 @@ namespace Books_IO.Dialogs
             imageArray = null;
             txt_attachment.Text = "No Image";
         }
-
+        string file_type = null;
         IDocumentReference query;
         StorageReference storage_ref;
         IonAlert loadingDialog;
@@ -117,11 +143,12 @@ namespace Books_IO.Dialogs
             data.Add("Edition", book_edition.Text);
             data.Add("ISBN", book_isbn_no.Text);
             data.Add("Author", book_author.Text);
+            data.Add("FileType", file_type);
             data.Add("ImageUrl", null);
             data.Add("Status", "Pending");
             data.Add("FacultyId", null);
             data.Add("Price", book_price.Text);
-            data.Add("Student_Id", FirebaseAuth.Instance.Uid);
+            data.Add("Student_Id", Firebase.Auth.FirebaseAuth.Instance.Uid);
             data.Add("TimeStamp", FieldValue.ServerTimestamp);
 
             query = await CrossCloudFirestore
@@ -129,31 +156,82 @@ namespace Books_IO.Dialogs
                 .Instance
                 .Collection("BooksListings")
                 .AddAsync(data);
-            Toast.MakeText(context, query.Id, ToastLength.Long).Show();
-            if (imageArray != null)
+            //Toast.MakeText(context, query.Id, ToastLength.Long).Show();
+            if (item_id == 0)
             {
-                storage_ref = FirebaseStorage
-                    .Instance
-                    .GetReference("Images").Child(query.Id);
-                storage_ref.PutBytes(imageArray)
-                    .AddOnSuccessListener(this)
-                    .AddOnFailureListener(this)
-                    .AddOnCompleteListener(this);
+
+                if (imageArray != null)
+                {
+                    storage_ref = FirebaseStorage
+                        .Instance
+                        .GetReference("Images").Child(query.Id);
+                    storage_ref.PutBytes(imageArray)
+                        .AddOnSuccessListener(this)
+                        .AddOnFailureListener(this)
+                        .AddOnCompleteListener(this);
                     
+                }
+                else
+                {
+                    loadingDialog.Dismiss();
+                    Dismiss();
+                }
             }
             else
             {
-                loadingDialog.Dismiss();
-                Dismiss();
+                if(PdfFile != null)
+                {
+                    storage_ref = FirebaseStorage
+                        .Instance
+                        .GetReference("Documents").Child(query.Id);
+                    storage_ref.PutStream(PdfFile)
+                        .AddOnSuccessListener(this)
+                        .AddOnFailureListener(this)
+                        .AddOnCompleteListener(this);
+                }
             }
 
         }
 
-        private void Btn_attachement_Click(object sender, EventArgs e)
+        private async void Btn_attachement_Click(object sender, EventArgs e)
         {
-            ChosePicture();
+            if(item_id == 0)
+            {
+                ChosePicture();
+            }
+            else
+            {
+                var options = new PickOptions
+                {
+                    PickerTitle = "Please select a comic file",
+                    FileTypes = FilePickerFileType.Pdf
+                };
+                PickAndShow(options);
+            }
         }
+        Stream PdfFile;
+       private async void PickAndShow(PickOptions options)
+        {
+            try
+            {
+                var result = await FilePicker.PickAsync(options);
+                if (result != null)
+                {
+                    
+                        PdfFile = await result.OpenReadAsync();
+                        txt_attachment.Text = "File Selected";
+                    file_type = "DPF";
+                }
 
+               
+            }
+            catch (Exception ex)
+            {
+                // The user canceled or something went wrong
+            }
+
+           
+        }
         private void Btn_search_isbn_Click(object sender, EventArgs e)
         {
             
@@ -177,7 +255,6 @@ namespace Books_IO.Dialogs
             try
             {
                 BookModel book = new BookModel();
-
                 book = JsonConvert.DeserializeObject<BookModel>(e.Result);
                 Toast.MakeText(context, book.Title, ToastLength.Long).Show();
                 book_edition.Text = null;
@@ -224,6 +301,7 @@ namespace Books_IO.Dialogs
                     //Bitmap bmp = BitmapFactory.DecodeByteArray(imageArray, 0, imageArray.Length);
                     //ImgAwareness.SetImageBitmap(bmp);
                     txt_attachment.Text = "Image selected";
+                    file_type = "IMG";
 
                 }
 

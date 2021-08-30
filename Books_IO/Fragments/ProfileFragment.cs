@@ -30,6 +30,7 @@ namespace Books_IO.Fragments
             ConnectViews(view);
             return view;
         }
+        private TextInputEditText InputStudentId; 
         private TextInputEditText InputName; 
         private TextInputEditText InputLastName; 
         private TextInputEditText InputEmail; 
@@ -39,6 +40,7 @@ namespace Books_IO.Fragments
         private void ConnectViews(View view)
         {
             context = view.Context;
+            InputStudentId = view.FindViewById<TextInputEditText>(Resource.Id.profile_student_id);
             InputName = view.FindViewById<TextInputEditText>(Resource.Id.profile_name);
             InputLastName = view.FindViewById<TextInputEditText>(Resource.Id.profile_lastname);
             InputEmail = view.FindViewById<TextInputEditText>(Resource.Id.profile_email);
@@ -46,6 +48,7 @@ namespace Books_IO.Fragments
             BtnUpdate = view.FindViewById<MaterialButton>(Resource.Id.btn_update);
 
             InputEmail.Enabled = false;
+            InputStudentId.Enabled = false;
             BtnUpdate.Click += BtnUpdate_Click;
             CrossCloudFirestore
                 .Current
@@ -61,6 +64,7 @@ namespace Books_IO.Fragments
                         InputLastName.Text = student.Surname;
                         InputPhone.Text = student.Phone;
                         InputEmail.Text = student.Email;
+                        InputStudentId.Text = student.StudentId;
                     }
                 });
 
@@ -93,7 +97,8 @@ namespace Books_IO.Fragments
             {
                 { "Name", InputName.Text },
                 { "Surname", InputLastName.Text },
-                { "Phone", InputPhone.Text }
+                { "Phone", InputPhone.Text },
+                { "StudentId", InputStudentId.Text }
             };
             CrossCloudFirestore
                 .Current

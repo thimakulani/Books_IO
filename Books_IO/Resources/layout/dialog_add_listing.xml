@@ -88,7 +88,8 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:id="@+id/book_price"
-            android:hint="@string/txt_book_price"
+           android:hint="@string/txt_book_price"
+           app:prefixText="@string/item_currency"
         />
 
     </com.google.android.material.textfield.TextInputLayout>
