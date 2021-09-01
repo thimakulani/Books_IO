@@ -52,6 +52,10 @@ namespace Admin.Adapters
                 .DownSampleInDip(250, 250)
                 .FadeAnimation(true, true, 300)
                 .IntoAsync(holder.Img);
+            if(items[position].Status == "Sold")
+            {
+                holder.ItemView.Enabled = false;
+            }
         }
 
         public override int ItemCount => items.Count;

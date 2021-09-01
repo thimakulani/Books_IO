@@ -28,6 +28,6 @@
     <string name="txt_sold">Sold</string>
     <string name="txt_student_number">Student Number/ID</string>
     <string name="item_currency">R</string>
-    <string name="txt_download">Download</string>
+    <string name="txt_download">Request PDF</string>
     
 </resources>

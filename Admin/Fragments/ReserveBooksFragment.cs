@@ -34,7 +34,7 @@ namespace Admin.Fragments
             return view;
         }
         private Context context;
-        private List<string> items = new List<string>();
+        private readonly List<string> items = new List<string>();
         private MaterialButton BtnSearchStudentId;
         private TextInputEditText InputStudentNo;
         private RecyclerView recycler;
@@ -138,8 +138,10 @@ namespace Admin.Fragments
 
         private async void Adapter_BtnClick(object sender, ReserveAdapterClickEventArgs e)
         {
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("Status", "Sold");
+            Dictionary<string, object> data = new Dictionary<string, object>
+            {
+                { "Status", "Sold" }
+            };
             await CrossCloudFirestore
                 .Current
                 .Instance

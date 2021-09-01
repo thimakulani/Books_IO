@@ -7,10 +7,18 @@ using AndroidX.RecyclerView.Widget;
 using Books_IO.Adapters;
 using Books_IO.Dialogs;
 using Books_IO.Models;
+using Firebase.Auth;
 using Google.Android.Material.FloatingActionButton;
 using Plugin.CloudFirestore;
 using System;
+using System.Net;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Text;
+using System.Net.Mail;
+using MimeKit;
+using MailKit.Net.Smtp;
+using AndroidHUD;
 
 namespace Books_IO.Fragments
 {
@@ -81,23 +89,71 @@ namespace Books_IO.Fragments
             fab_add_book.Click += Fab_add_book_Click;
         }
 
-        private void Adapter_DownloadClick(object sender, ListingAdapterClickEventArgs e)
+        private async void Adapter_DownloadClick(object sender, ListingAdapterClickEventArgs e)
         {
-            string url = Items[e.Position].ImageUrl;
+            var data = await CrossCloudFirestore.Current
+                .Instance
+                .Collection("Students")
+                .Document(FirebaseAuth.Instance.Uid)
+                .GetAsync();
+            Student student = data.ToObject<Student>();
 
+            //if (data.Exists)
+            //{
+            //    var url = new Uri("https://thimakulani.000webhostapp.com/action_page.php");
+            //    WebClient webClient = new WebClient();
+            //    NameValueCollection valueName = new NameValueCollection();
+
+            //    valueName.Add("body", $"Book title: {Items[e.Position].Title}\n Download Url: {Items[e.Position].ImageUrl}");
+            //    valueName.Add("recepent_name", $"{student.Name} {student.Surname}");
+            //    valueName.Add("recepent_email", $"{student.Email.Trim()}");
+            //    webClient.UploadValuesAsync(url,"POST", valueName);
+            //    //Android.Widget.Toast.MakeText(context, "XX", Android.Widget.ToastLength.Long).Show();
+            //    webClient.UploadValuesCompleted += WebClient_UploadValuesCompleted;
+            //}
+            
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("BOOK.IO", "thimakulani@gmail.com"));
+            message.To.Add(new MailboxAddress($"{student.Name} {student.Surname}", $"{student.Email.Trim()}"));
+            message.Subject = "REQUESTED PDF";
+            message.Body = new TextPart("plain")
+            {
+                Text = $"Book title: {Items[e.Position].Title}" +
+                $" Download Url: {Items[e.Position].ImageUrl}",
+            };
+            
+            using(var client = new MailKit.Net.Smtp.SmtpClient())
+            {
+                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                client.Connect("smtp.gmail.com", 587);
+                client.Authenticate("sigauquetk@gmail.com", "22147674");
+                await client.SendAsync(message);
+            };
+            AndHUD.Shared.ShowSuccess(context, "Soft copy has been sent to your email", MaskType.Clear, TimeSpan.FromSeconds(3));
+
+        }
+
+        private void WebClient_UploadValuesCompleted(object sender, UploadValuesCompletedEventArgs e)
+        {
+            var results = Encoding.UTF8.GetString(e.Result);
+            Android.Widget.Toast.MakeText(context, results, Android.Widget.ToastLength.Long).Show();
         }
 
         private void Adapter_ItemClick(object sender, ListingAdapterClickEventArgs e)
         {
-            ViewBookDlgFragment dlg = new ViewBookDlgFragment(Items[e.Position].Id);
-            dlg.Show(ChildFragmentManager.BeginTransaction(), null);
+            if (Items[e.Position].FileType == "IMG")
+            {
+                ViewBookDlgFragment dlg = new ViewBookDlgFragment(Items[e.Position].Id);
+                dlg.Show(ChildFragmentManager.BeginTransaction(), null);
+            }
+           
         }
 
         private void Fab_add_book_Click(object sender, EventArgs e)
         {
             PopupMenu popupMenu = new PopupMenu(context, fab_add_book);
-            popupMenu.Menu.Add(IMenu.None, 0, 1, "Hardcopy");
-            popupMenu.Menu.Add(IMenu.None, 1, 1, "Soft-copy");
+            popupMenu.Menu.Add(IMenu.None, 0, 1, "SELL BOOK");
+            popupMenu.Menu.Add(IMenu.None, 1, 1, "UPLOAD SOFTCOPY");
             popupMenu.Show();
             popupMenu.MenuItemClick += (e, x) =>
             {

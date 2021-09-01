@@ -24,7 +24,7 @@ namespace Books_IO.Dialogs
 {
     public class ViewBookDlgFragment : DialogFragment
     {
-        private string book_id = null;
+        private readonly string book_id = null;
 
         public ViewBookDlgFragment(string book_id)
         {

@@ -81,6 +81,10 @@ namespace Admin.Dialogs
                         student_id = books.Student_Id;
                         book_status.Text = books.Status;
                         student_id = books.Student_Id;
+                        if(books.Status == "Approved")
+                        {
+                            btn_add_reserve.Enabled = false;
+                        }
                     }
                 });
 

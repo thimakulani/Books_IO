@@ -45,6 +45,7 @@ namespace Admin.Fragments
                 .Instance
                 .Collection("BooksListings")
                 .WhereEqualsTo("Status", "Pending")
+                .WhereEqualsTo("FileType", "IMG")
                 .AddSnapshotListener((values, error) =>
                 {
                     if (!values.IsEmpty)

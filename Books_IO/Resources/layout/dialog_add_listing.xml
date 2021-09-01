@@ -90,6 +90,7 @@
            android:id="@+id/book_price"
            android:hint="@string/txt_book_price"
            app:prefixText="@string/item_currency"
+           android:inputType="number"
         />
 
     </com.google.android.material.textfield.TextInputLayout>

@@ -120,12 +120,14 @@ namespace Books_IO.Fragments
             try
             {
                 var results = await auth.CreateUserAsync(user);
-                Dictionary<string, object> data = new Dictionary<string, object>();
-                data.Add("Name", InputName.Text);
-                data.Add("Surname", InputSurname.Text);
-                data.Add("Email", InputEmail.Text);
-                data.Add("StudentId", InputStudentNumber.Text);
-                data.Add("Phone", InputPhone.Text);
+                Dictionary<string, object> data = new Dictionary<string, object>
+                {
+                    { "Name", InputName.Text },
+                    { "Surname", InputSurname.Text },
+                    { "Email", InputEmail.Text },
+                    { "StudentId", InputStudentNumber.Text },
+                    { "Phone", InputPhone.Text }
+                };
 
                 await CrossCloudFirestore
                     .Current

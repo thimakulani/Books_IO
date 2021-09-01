@@ -7,6 +7,9 @@
     android:layout_width="match_parent"
     android:layout_margin="7dp"
     android:layout_height="wrap_content"
+    app:elevation="5dp"
+    app:strokeColor="@color/colorPrimary"
+    app:strokeWidth="0.5dp"
     >
 
     <LinearLayout
@@ -55,6 +58,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/btn_download_pdf"
             android:text="@string/txt_download"
+            android:layout_margin="7dp"
         />
     </LinearLayout>
     

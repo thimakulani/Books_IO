@@ -48,7 +48,7 @@ namespace Books_IO.Dialogs
         private MaterialTextView txt_attachment;
         private Context context;
 
-        int item_id;
+        private readonly int item_id;
 
         public AddBookToListing(int item_id)
         {
@@ -73,6 +73,11 @@ namespace Books_IO.Dialogs
             btn_attachement = view.FindViewById<MaterialButton>(Resource.Id.btn_attachement);
             btn_remove_attachement = view.FindViewById<MaterialButton>(Resource.Id.btn_remove_attachement);
 
+            book_isbn_no = view.FindViewById<TextInputEditText>(Resource.Id.book_isbn_no);
+            book_title = view.FindViewById<TextInputEditText>(Resource.Id.book_title);
+            book_price = view.FindViewById<TextInputEditText>(Resource.Id.book_price);
+            book_edition = view.FindViewById<TextInputEditText>(Resource.Id.book_edition);
+            book_author = view.FindViewById<TextInputEditText>(Resource.Id.book_author);
             txt_attachment = view.FindViewById<MaterialTextView>(Resource.Id.book_attachement);
             if(item_id == 0)
             {
@@ -83,14 +88,11 @@ namespace Books_IO.Dialogs
             {
                 txt_attachment.Text = "No File";
                 btn_attachement.Text = "SELECT FILE";
+                book_price.Text = "0";
+                book_price.Visibility = ViewStates.Gone;
 
             }
 
-            book_isbn_no = view.FindViewById<TextInputEditText>(Resource.Id.book_isbn_no);
-            book_title = view.FindViewById<TextInputEditText>(Resource.Id.book_title);
-            book_price = view.FindViewById<TextInputEditText>(Resource.Id.book_price);
-            book_edition = view.FindViewById<TextInputEditText>(Resource.Id.book_edition);
-            book_author = view.FindViewById<TextInputEditText>(Resource.Id.book_author);
        //     book_isbn_no = view.FindViewById<TextInputEditText>(Resource.Id.book_isbn_no);
 
             btn_search_isbn.Click += Btn_search_isbn_Click;
@@ -138,28 +140,30 @@ namespace Books_IO.Dialogs
                 .ShowCancelButton(false)
                 .Show();
 
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("Title", book_title.Text);
-            data.Add("Edition", book_edition.Text);
-            data.Add("ISBN", book_isbn_no.Text);
-            data.Add("Author", book_author.Text);
-            data.Add("FileType", file_type);
-            data.Add("ImageUrl", null);
-            data.Add("Status", "Pending");
-            data.Add("FacultyId", null);
-            data.Add("Price", book_price.Text);
-            data.Add("Student_Id", Firebase.Auth.FirebaseAuth.Instance.Uid);
-            data.Add("TimeStamp", FieldValue.ServerTimestamp);
+            Dictionary<string, object> data = new Dictionary<string, object>
+            {
+                { "Title", book_title.Text },
+                { "Edition", book_edition.Text },
+                { "ISBN", book_isbn_no.Text },
+                { "Author", book_author.Text },
+                { "FileType", file_type },
+                { "ImageUrl", null },
+                { "Status", "Pending" },
+                { "FacultyId", null },
+                { "Price", book_price.Text },
+                { "Student_Id", Firebase.Auth.FirebaseAuth.Instance.Uid },
+                { "TimeStamp", FieldValue.ServerTimestamp }
+            };
 
-            query = await CrossCloudFirestore
-                .Current
-                .Instance
-                .Collection("BooksListings")
-                .AddAsync(data);
+            
             //Toast.MakeText(context, query.Id, ToastLength.Long).Show();
             if (item_id == 0)
             {
-
+                query = await CrossCloudFirestore
+                    .Current
+                    .Instance
+                    .Collection("BooksListings")
+                    .AddAsync(data);
                 if (imageArray != null)
                 {
                     storage_ref = FirebaseStorage
@@ -174,13 +178,21 @@ namespace Books_IO.Dialogs
                 else
                 {
                     loadingDialog.Dismiss();
-                    Dismiss();
+                    //Dismiss();
+                    AndroidHUD.AndHUD.Shared.ShowSuccess(context, "BOOK IMAGE REQUIRED", AndroidHUD.MaskType.Clear, TimeSpan.FromSeconds(2));
+                    btn_attachement.Error = "Book Image required";
                 }
             }
             else
             {
-                if(PdfFile != null)
+                
+                if (PdfFile != null)
                 {
+                    query = await CrossCloudFirestore
+                        .Current
+                        .Instance
+                        .Collection("BooksListings")
+                        .AddAsync(data);
                     storage_ref = FirebaseStorage
                         .Instance
                         .GetReference("Documents").Child(query.Id);
@@ -189,11 +201,19 @@ namespace Books_IO.Dialogs
                         .AddOnFailureListener(this)
                         .AddOnCompleteListener(this);
                 }
+                else
+                {
+
+                    loadingDialog.Dismiss();
+                    //Dismiss();
+                    AndroidHUD.AndHUD.Shared.ShowSuccess(context, "BOOK SOFTCOPY REQUIRED", AndroidHUD.MaskType.Clear, TimeSpan.FromSeconds(2));
+                    btn_attachement.Error = "Book softcopy required";
+                }
             }
 
         }
 
-        private async void Btn_attachement_Click(object sender, EventArgs e)
+        private void Btn_attachement_Click(object sender, EventArgs e)
         {
             if(item_id == 0)
             {
@@ -217,17 +237,18 @@ namespace Books_IO.Dialogs
                 var result = await FilePicker.PickAsync(options);
                 if (result != null)
                 {
-                    
-                        PdfFile = await result.OpenReadAsync();
-                        txt_attachment.Text = "File Selected";
-                    file_type = "DPF";
+
+                    PdfFile = await result.OpenReadAsync();
+                    txt_attachment.Text = "File Selected";
+                    file_type = "PDF";
                 }
 
                
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // The user canceled or something went wrong
+
             }
 
            
