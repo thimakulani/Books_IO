@@ -43,7 +43,7 @@ namespace Admin.Adapters
             holder.Txt_book_item_title.Text = items[position].Title;
             holder.Txt_book_item_author.Text = items[position].Author;
             holder.Txt_book_item_addition.Text = items[position].Edition;
-            holder.Txt_book_item_price.Text = items[position].Price;
+            holder.Txt_book_item_price.Text = $"R {items[position].Price}";
             holder.Txt_book_item_status.Text = items[position].Status;
 
             ImageService.Instance

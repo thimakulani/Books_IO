@@ -98,32 +98,25 @@ namespace Books_IO.Fragments
                 .GetAsync();
             Student student = data.ToObject<Student>();
 
-            //if (data.Exists)
-            //{
-            //    var url = new Uri("https://thimakulani.000webhostapp.com/action_page.php");
-            //    WebClient webClient = new WebClient();
-            //    NameValueCollection valueName = new NameValueCollection();
-
-            //    valueName.Add("body", $"Book title: {Items[e.Position].Title}\n Download Url: {Items[e.Position].ImageUrl}");
-            //    valueName.Add("recepent_name", $"{student.Name} {student.Surname}");
-            //    valueName.Add("recepent_email", $"{student.Email.Trim()}");
-            //    webClient.UploadValuesAsync(url,"POST", valueName);
-            //    //Android.Widget.Toast.MakeText(context, "XX", Android.Widget.ToastLength.Long).Show();
-            //    webClient.UploadValuesCompleted += WebClient_UploadValuesCompleted;
-            //}
             
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("BOOK.IO", "thimakulani@gmail.com"));
             message.To.Add(new MailboxAddress($"{student.Name} {student.Surname}", $"{student.Email.Trim()}"));
             message.Subject = "REQUESTED PDF";
-            message.Body = new TextPart("plain")
+            string body = generateBody(Items[e.Position]);
+
+
+            message.Body = new TextPart("html")
             {
-                Text = $"Book title: {Items[e.Position].Title}" +
-                $" Download Url: {Items[e.Position].ImageUrl}",
+                Text = body,
+               
+                //Text = $"Book title: {Items[e.Position].Title}" +
+                //$" Download Url: {Items[e.Position].ImageUrl}",
             };
             
             using(var client = new MailKit.Net.Smtp.SmtpClient())
             {
+
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                 client.Connect("smtp.gmail.com", 587);
                 client.Authenticate("sigauquetk@gmail.com", "22147674");
@@ -131,6 +124,57 @@ namespace Books_IO.Fragments
             };
             AndHUD.Shared.ShowSuccess(context, "Soft copy has been sent to your email", MaskType.Clear, TimeSpan.FromSeconds(3));
 
+        }
+
+        private string generateBody(Books books)
+        {
+
+            var body =@"<!DOCTYPE html>
+                <html>
+                <head>
+                <style>
+                table {
+                  font-family: arial, sans-serif;
+                  border-collapse: collapse;
+                  width: 100%;
+                }
+
+                td, th {
+                  border: 1px solid #dddddd;
+                  text-align: left;
+                  padding: 8px;
+                }
+
+                tr:nth-child(even) {
+                  background-color: #dddddd;
+                }
+                </style>
+                </head>
+                <body>
+
+                <h2>HTML Table</h2>
+
+                <table>
+                  <tr>
+                    <th>Book Title</th>
+                    <th>Edition</th>
+                    <th>Download Link</th>
+                  </tr>";
+            body += @$"
+                  <tr>
+                    <td>{books.Title}</td>
+                    <td>{books.Edition}</td>
+                    <td><a href='{books.ImageUrl}'>Download</td>
+                  </tr>
+                  
+                </table>
+
+                </body>
+                </html>";
+
+
+
+            return body;
         }
 
         private void WebClient_UploadValuesCompleted(object sender, UploadValuesCompletedEventArgs e)

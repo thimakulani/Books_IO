@@ -77,6 +77,13 @@ namespace Admin.Activities
                     .Replace(Resource.Id.fragment_host, new ReserveBooksFragment())
                     .Commit();
             }
+            if(id == Resource.Id.nav_categories)
+            {
+                SupportFragmentManager
+                    .BeginTransaction()
+                    .Replace(Resource.Id.fragment_host, new CategoryFragment())
+                    .Commit();
+            }
             if (id == Resource.Id.nav_logout)
             {
                 FirebaseAuth.Instance.SignOut();

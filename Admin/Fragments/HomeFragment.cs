@@ -40,6 +40,14 @@ namespace Admin.Fragments
             recycler_books_list.SetAdapter(adapter);
             adapter.NotifyDataSetChanged();
             adapter.ItemClick += Adapter_ItemClick;
+
+
+
+
+
+
+
+
             CrossCloudFirestore
                 .Current
                 .Instance
@@ -82,7 +90,7 @@ namespace Admin.Fragments
             dlg.Show(ChildFragmentManager.BeginTransaction(), null);
         }
 
-        
+
     }
- 
+
 }
