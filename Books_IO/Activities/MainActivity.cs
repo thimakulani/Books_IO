@@ -1,7 +1,12 @@
 ﻿using Android.App;
+using Android.Content.PM;
+using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V4.App;
+using Android.Support.V4.Content;
 using AndroidX.AppCompat.App;
+using AndroidX.AppCompat.Widget;
 using Books_IO.Fragments;
 using Books_IO.Models;
 using Firebase.Auth;
@@ -10,6 +15,12 @@ using Google.Android.Material.AppBar;
 using Google.Android.Material.BottomNavigation;
 using IsmaelDiVita.ChipNavigationLib;
 using Plugin.CloudFirestore;
+using System;
+using System.IO;
+using ZXing;
+using ZXing.Common;
+using static Android.App.ActionBar;
+using AlertDialog = Android.App.AlertDialog;
 
 namespace Books_IO
 {
@@ -18,6 +29,15 @@ namespace Books_IO
     {
         private ChipNavigationBar bottom_nav;
         private MaterialToolbar toolbar;
+        private AppCompatImageView qr_code;
+        private Dialog popupDialog;
+        private AppCompatImageView qr_code_image, close;
+
+        private string message;
+        private static int size = 660;
+        private static int small_size = 264;
+        private string CodeType;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -32,12 +52,14 @@ namespace Books_IO
                     .Commit();
             }
 
-
             toolbar = FindViewById<MaterialToolbar>(Resource.Id.toolbar);
             bottom_nav = FindViewById<ChipNavigationBar>(Resource.Id.bottom_nav);
+            qr_code = FindViewById<AppCompatImageView>(Resource.Id.img_unique_qr_code);
+
             bottom_nav.SetMenuResource(Resource.Menu.nav_menu);
             bottom_nav.SetItemSelected(Resource.Id.nav_home);
             bottom_nav.SetOnItemSelectedListener(this);
+            GeneerateQRCode();
             CrossCloudFirestore
                .Current
                .Instance
@@ -53,10 +75,101 @@ namespace Books_IO
                    }
                });
 
+            qr_code.Click += Qr_code_Click;
+
         }
 
-       
+        private void Qr_code_Click(object sender, System.EventArgs e)
+        {
 
+          
+            popupDialog = new Dialog(this);
+            popupDialog.SetContentView(Resource.Layout.qrcode_fragment);
+            popupDialog.Show();
+
+            popupDialog.Window.SetLayout(LayoutParams.MatchParent, LayoutParams.MatchParent);
+            popupDialog.Window.SetBackgroundDrawableResource(Android.Resource.Color.Transparent);
+
+            close = popupDialog.FindViewById<AppCompatImageView>(Resource.Id.img_close);
+            qr_code_image = popupDialog.FindViewById<AppCompatImageView>(Resource.Id.img_qr);
+
+
+
+            close.Click += Close_Click;
+
+          
+        }
+
+        private void Close_Click(object sender, EventArgs e)
+        {
+            popupDialog.Dismiss();
+        }
+
+        private void GeneerateQRCode()
+        {
+            string[] PERMISSIONS =
+               {
+                    "android.permission.READ_EXTERNAL_STORAGE",
+                    "android.permission.WRITE_EXTERNAL_STORAGE"
+                };
+
+            var permission = ContextCompat.CheckSelfPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE");
+            var permissionread = ContextCompat.CheckSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE");
+
+            if (permission != Permission.Granted && permissionread != Permission.Granted)
+                ActivityCompat.RequestPermissions(this, PERMISSIONS, 1);
+
+            try
+            {
+                if (permission == Permission.Granted && permissionread == Permission.Granted)
+                {
+                    BitMatrix bitmapMatrix = null;
+                    message = FirebaseAuth.Instance.Uid; ;
+
+
+                    //bitmapMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, size, size);
+
+                    var width = bitmapMatrix.Width;
+                    var height = bitmapMatrix.Height;
+                    int[] pixelsImage = new int[width * height];
+
+                    for (int i = 0; i < height; i++)
+                    {
+                        for (int j = 0; j < width; j++)
+                        {
+                            if (bitmapMatrix[j, i])
+                                pixelsImage[i * width + j] = (int)Convert.ToInt64(0xff000000);
+                            else
+                                pixelsImage[i * width + j] = (int)Convert.ToInt64(0xffffffff);
+
+                        }
+                    }
+
+                    Bitmap bitmap = Bitmap.CreateBitmap(width, height, Bitmap.Config.Argb8888);
+                    bitmap.SetPixels(pixelsImage, 0, width, 0, 0, width, height);
+
+                    var sdpath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+                    var path = System.IO.Path.Combine(sdpath, "logeshbarcode.jpg");
+                    var stream = new FileStream(path, FileMode.Create);
+                    bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
+                    stream.Close();
+
+                    qr_code_image.SetImageBitmap(bitmap);
+                }
+                else
+                {
+                    Console.WriteLine("No Permission");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception {ex} ");
+            }
+
+
+        }
+
+     
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -99,15 +212,26 @@ namespace Books_IO
             }
             else if (id == Resource.Id.nav_logout)
             {
-                FirebaseAuth.Instance.SignOut();
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                AlertDialog alert = dialog.Create();
+                alert.SetTitle("Exiting app");
+                alert.SetMessage("You are attempting to exit the app! \n Would you like to proceed?");
+                alert.SetIcon(Resource.Drawable.ic_round_info_24);
+                alert.SetButton("OK", (c, ev) =>
                 {
-                    base.FinishAndRemoveTask();
-                }
-                else
-                {
-                    base.Finish();
-                }
+                    FirebaseAuth.Instance.SignOut();
+                    if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+                    {
+                        base.FinishAndRemoveTask();
+                    }
+                    else
+                    {
+                        base.Finish();
+                    }
+                });
+                alert.SetButton2("CANCEL", (c, ev) => { });
+                alert.Show();
+               
             }
             
         }

@@ -79,6 +79,7 @@
     <Compile Include="Dialogs\ViewBookDlgFragment.cs" />
     <Compile Include="FirebaseHelper\FirebaseAdminSDK.cs" />
     <Compile Include="FirebaseHelper\FirebaseMessagingModel.cs" />
+    <Compile Include="Fragments\QRCodeFragment.cs" />
     <Compile Include="Fragments\SellingFragment.cs" />
     <Compile Include="Fragments\ReservedFragment.cs" />
     <Compile Include="Fragments\HomeFragment.cs" />
@@ -200,6 +201,9 @@
     </PackageReference>
     <PackageReference Include="Xamarin.Kotlin.StdLib.Jdk7">
       <Version>1.5.21</Version>
+    </PackageReference>
+    <PackageReference Include="ZXing.Net">
+      <Version>0.16.7</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -792,6 +796,21 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_cancel_black_18dp.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_round_exit_to_app_24.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_round_info_24.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_baseline_qr_code_24.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\qrcode_fragment.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
