@@ -30,13 +30,6 @@ namespace Books_IO
         private ChipNavigationBar bottom_nav;
         private MaterialToolbar toolbar;
         private AppCompatImageView qr_code;
-        private Dialog popupDialog;
-        private AppCompatImageView qr_code_image, close;
-
-        private string message;
-        private static int size = 660;
-        private static int small_size = 264;
-        private string CodeType;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -101,10 +94,7 @@ namespace Books_IO
 
         }
 
-        private void Close_Click(object sender, EventArgs e)
-        {
-            popupDialog.Dismiss();
-        }
+      
 
         //private void GeneerateQRCode()
         //{

@@ -14,6 +14,7 @@ namespace Admin.Activities
     public class MainActivity : AppCompatActivity, IsmaelDiVita.ChipNavigationLib.ChipNavigationBar.IOnItemSelectedListener
     {
         private ChipNavigationBar bottom_nav;
+        string[] PERMISSIONS = { "android.permission.CAMERA" };
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -27,7 +28,7 @@ namespace Admin.Activities
                     .Add(Resource.Id.fragment_host, new HomeFragment())
                     .Commit();
             }
-
+            AndroidX.Core.App.ActivityCompat.RequestPermissions(this, PERMISSIONS, 1);
 
             bottom_nav = FindViewById<ChipNavigationBar>(Resource.Id.bottom_nav);
             bottom_nav.SetMenuResource(Resource.Menu.nav_menu);

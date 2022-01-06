@@ -1,4 +1,5 @@
 ﻿using Admin.Adapters;
+using Admin.Dialogs;
 using Admin.Models;
 using Android.Content;
 using Android.OS;
@@ -92,6 +93,8 @@ namespace Admin.Fragments
         private int counter = 0;
         private async void BtnSearchStudentId_Click(object sender, System.EventArgs e)
         {
+            ScanDlgFragment scanDlgFragment = new ScanDlgFragment();
+            scanDlgFragment.Show(ChildFragmentManager.BeginTransaction(), "");
             if (!string.IsNullOrEmpty(InputStudentNo.Text))
             {
                 var query = await CrossCloudFirestore.Current
