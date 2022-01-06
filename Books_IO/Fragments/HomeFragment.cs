@@ -100,7 +100,7 @@ namespace Books_IO.Fragments
 
             
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("BOOK.IO", "sigauquetk@gmail.com"));
+            message.From.Add(new MailboxAddress("BOOK.IO", "thimakulani@gmail.com"));
             message.To.Add(new MailboxAddress($"{student.Name} {student.Surname}", $"{student.Email.Trim()}"));
             message.Subject = "REQUESTED PDF";
             string body = generateBody(Items[e.Position]);
@@ -119,7 +119,7 @@ namespace Books_IO.Fragments
 
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                 client.Connect("smtp.gmail.com", 587);
-                client.Authenticate("sigauquetk@gmail.com", "THIma$!305");
+                client.Authenticate("sigauquetk@gmail.com", "22147674");
                 await client.SendAsync(message);
             };
             AndHUD.Shared.ShowSuccess(context, "Soft copy has been sent to your email", MaskType.Clear, TimeSpan.FromSeconds(3));

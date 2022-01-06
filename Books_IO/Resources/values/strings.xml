@@ -29,5 +29,9 @@
     <string name="txt_student_number">Student Number/ID</string>
     <string name="item_currency">R</string>
     <string name="txt_download">Request PDF</string>
-    
+
+	<string name="txt_book_name">Book name:</string>
+	<string name="txt_book_price_label">Book Price:</string>
+	<string name="txt_status">Book Status:</string>
+
 </resources>

@@ -37,38 +37,110 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
             >
-                <com.google.android.material.textview.MaterialTextView
+                <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                     <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                        android:text="@string/txt_book_name"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/book_item_title"
+                    android:textSize="18dp"
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
                     android:layout_margin="7dp"
                     />
-                <com.google.android.material.textview.MaterialTextView
+                    </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                     <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="7dp"
                     android:visibility="gone"
+                    android:text="@string/txt_status"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:visibility="gone"
+                    android:textSize="18dp"
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
                     android:id="@+id/book_item_author"
                     />
-                <com.google.android.material.textview.MaterialTextView
+                    </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                     <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="7dp"
                     android:visibility="gone"
+                    android:text="@string/txt_book_name"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:visibility="gone"
+                    android:textSize="18dp"
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
                     android:id="@+id/book_item_addition"
                     />
-                <com.google.android.material.textview.MaterialTextView
+                    </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                     <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="7dp"
+                    android:text="@string/txt_book_price_label"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:textSize="18dp"
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
                     android:id="@+id/book_item_price"
                     />
-                <com.google.android.material.textview.MaterialTextView
+                    </LinearLayout>
+
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                     <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="7dp"
+                    android:text="@string/txt_status"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:textSize="18dp"
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
                     android:id="@+id/book_item_status"
                     />
+                    </LinearLayout>
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

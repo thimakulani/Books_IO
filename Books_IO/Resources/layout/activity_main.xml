@@ -8,14 +8,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/appBarLayout1"
-    >
+    >   <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
          <com.google.android.material.appbar.MaterialToolbar
-             android:layout_width="match_parent"
+             android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:id="@+id/toolbar"
+              android:textAlignment="textStart"
+             android:layout_alignParentLeft="true"
+             android:layout_toLeftOf="@+id/img_unique_qr_code"
              app:titleTextColor="@color/white"
             />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:id="@+id/img_unique_qr_code"
+            android:src="@drawable/ic_baseline_qr_code_24"/>
+        </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
     <FrameLayout
         android:layout_width="match_parent"

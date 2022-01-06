@@ -26,7 +26,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         />
   <item android:id="@+id/nav_logout"
      android:title="@string/txt_logout"
-     android:icon="@drawable/ic_cancel_black_18dp"
+     android:icon="@drawable/ic_round_exit_to_app_24"
      app:cnb_iconColor="#0096fa"
         />
   
