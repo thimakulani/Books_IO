@@ -100,7 +100,7 @@ namespace Books_IO.Fragments
 
             
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("BOOK.IO", "thimakulani@gmail.com"));
+            message.From.Add(new MailboxAddress("BOOK.IO", "sigauquetk@gmail.com"));
             message.To.Add(new MailboxAddress($"{student.Name} {student.Surname}", $"{student.Email.Trim()}"));
             message.Subject = "REQUESTED PDF";
             string body = generateBody(Items[e.Position]);

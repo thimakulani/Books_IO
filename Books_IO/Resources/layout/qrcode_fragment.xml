@@ -11,36 +11,37 @@
 
 
     <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:orientation="vertical"
-            android:gravity="center"
-    android:layout_centerVertical="true">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerVertical="true">
        
-<androidx.appcompat.widget.AppCompatImageView
-    android:layout_width="250dp"
-    android:layout_height="250dp"
-android:layout_centerHorizontal="true"
-    android:layout_centerVertical="true"
-    android:id="@+id/img_qr"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_margin="20dp"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/img_qr"/>
 
         
         <com.google.android.material.textview.MaterialTextView
-      android:layout_width="80dp"
-      android:layout_height="wrap_content"
-      android:layout_margin="7dp"
-      android:text="@string/txt_status"
-                    />
+              android:layout_width="80dp"
+              android:layout_height="wrap_content"
+              android:layout_margin="7dp"
+              android:text="@string/txt_status"
+        />
     </LinearLayout>
     
     <androidx.appcompat.widget.AppCompatImageView
-    android:layout_width="25dp"
-    android:layout_height="25dp"
-android:layout_alignParentRight="true"
-    android:layout_marginTop="10dp"
-    android:layout_marginRight="10dp"
-    android:id="@+id/img_close"
-    android:src="@drawable/ic_cancel_black_18dp"/>
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/img_close"
+        android:src="@drawable/ic_cancel_black_18dp"/>
 
 
 
