@@ -21,7 +21,7 @@ using ZXing;
 
 namespace Admin.Dialogs
 {
-    public class ScanDlgFragment : DialogFragment, IPermissionListener, IResultHandler
+    public class ScanDlgFragment : DialogFragment, IPermissionListener //IResultHandler
     {
         public override void OnCreate(Bundle savedInstanceState)
         {
@@ -44,11 +44,11 @@ namespace Admin.Dialogs
         private void ConnectViews(View view)
         {
             scan_view = view.FindViewById<ZXingScannerView>(Resource.Id.scan_view);
-           
+
 
             if (ContextCompat.CheckSelfPermission(view.Context, Manifest.Permission.Camera) == (int)Permission.Granted)
             {
-                scan_view.SetResultHandler(this);
+               // scan_view.SetResultHandler(this); 
             }
             else
             {
@@ -57,12 +57,12 @@ namespace Admin.Dialogs
 
             }
 
-            
+
         }
 
         public void OnPermissionDenied(PermissionDeniedResponse p0)
         {
-            
+
         }
 
         public void OnPermissionGranted(PermissionGrantedResponse p0)
@@ -74,9 +74,10 @@ namespace Admin.Dialogs
         {
         }
 
-        public void HandleResult(Result rawResult)
-        {
-            
-        }
+        //public void HandleResult(Result rawResult)
+        //{
+
+
+        //}
     }
 }

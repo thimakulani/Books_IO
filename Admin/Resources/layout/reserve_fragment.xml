@@ -6,37 +6,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <RelativeLayout
+      <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:id="@+id/relativeLayout1"
-        
+        android:layout_margin="10dp"
+        android:gravity="center"
         >
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_toStartOf="@+id/btn_search_student_no"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/InputStudentNo"
-                android:hint="@string/txt_student_number"
-            />
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/btn_search_student_no"
+                 <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/InputLayout"
+                    android:layout_centerVertical="true"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                   
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/InputStudentNo"
+                    android:hint="@string/txt_student_number"
+                />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+                 <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                android:id="@+id/btn_search_student_no"
+                android:src="@drawable/abc_ic_search_api_material"
+            android:layout_toLeftOf="@+id/view"
+            />
+                 />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="40dp"
+            android:id="@+id/view"
+            android:layout_marginTop="2dp"
             android:layout_centerVertical="true"
-            android:layout_margin="5dp"
-            android:text="@string/txt_btn_search_student_no"
-        />
-    </RelativeLayout>
+            android:layout_toLeftOf="@+id/img_scanner"
+            android:background="@color/colorPrimary"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/img_scanner"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_baseline_qr_code_scanner_24"/>
+        </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

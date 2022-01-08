@@ -7,6 +7,7 @@ using AndroidX.AppCompat.App;
 using Firebase.Auth;
 using IsmaelDiVita.ChipNavigationLib;
 using Plugin.CloudFirestore;
+using AlertDialog = Android.App.AlertDialog;
 
 namespace Admin.Activities
 {
@@ -87,15 +88,27 @@ namespace Admin.Activities
             }
             if (id == Resource.Id.nav_logout)
             {
-                FirebaseAuth.Instance.SignOut();
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                AlertDialog alert = dialog.Create();
+                alert.SetTitle("Exiting app");
+                alert.SetMessage("You are attempting to exit the app! \n Would you like to proceed?");
+                alert.SetIcon(Resource.Drawable.ic_round_info_24);
+                alert.SetButton("OK", (c, ev) =>
                 {
-                    base.FinishAndRemoveTask();
-                }
-                else
-                {
-                    base.Finish();
-                }
+                    FirebaseAuth.Instance.SignOut();
+                    if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+                    {
+                        base.FinishAndRemoveTask();
+                    }
+                    else
+                    {
+                        base.Finish();
+                    }
+                });
+                alert.SetButton2("CANCEL", (c, ev) => { });
+                alert.Show();
+               
             }
         }
     }
