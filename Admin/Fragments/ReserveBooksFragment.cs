@@ -18,8 +18,6 @@ using Google.Android.Material.TextView;
 using Plugin.CloudFirestore;
 using System;
 using System.Collections.Generic;
-using ZXing.Mobile;
-using ZXing.Mobile.CameraAccess;
 
 namespace Admin.Fragments
 {
@@ -50,9 +48,6 @@ namespace Admin.Fragments
         private readonly Context _context;
         private readonly ISurfaceHolder _holder;
         private readonly SurfaceView _surfaceView;
-        private readonly CameraEventsListener _cameraEventListener;
-        private int _cameraId;
-        IScannerSessionHost _scannerHost;
 
         private string student_id = null;
         private int counter = 0;
@@ -75,16 +70,10 @@ namespace Admin.Fragments
 
         private async void ImgScan_Click(object sender, EventArgs e)
         {
-            var MScanner = new MobileBarcodeScanner();
-            var Result = await MScanner.Scan();
-            if (Result == null)
-            {
-                return;
-            }
-            //get the bar code text here 
-            string BarcodeText = Result.Text;
+            ScanDlgFragment fragment = new ScanDlgFragment();
+            fragment.Show(ChildFragmentManager.BeginTransaction(), "");
 
-            Toast.MakeText(context, Result.Text, ToastLength.Long).Show();
+
         }
 
         private async void ImgSearchStudentId_Click(object sender, System.EventArgs e)

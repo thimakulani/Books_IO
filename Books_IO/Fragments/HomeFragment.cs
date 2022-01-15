@@ -116,7 +116,6 @@ namespace Books_IO.Fragments
             
             using(var client = new MailKit.Net.Smtp.SmtpClient())
             {
-
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                 client.Connect("smtp.gmail.com", 587);
                 client.Authenticate("sigauquetk@gmail.com", "22147674");
