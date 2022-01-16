@@ -61,19 +61,121 @@ namespace Admin.Fragments
             InputStudentNo = view.FindViewById<TextInputEditText>(Resource.Id.InputStudentNo);
             recycler.SetLayoutManager(new LinearLayoutManager(view.Context));
             txt_total_count.Text = $"TOTAL BOOKS: {0}";
-           
+
 
             ImgSearchStudentId.Click += ImgSearchStudentId_Click;
             ImgScan.Click += ImgScan_Click;
 
         }
 
-        private async void ImgScan_Click(object sender, EventArgs e)
+        private void ImgScan_Click(object sender, EventArgs e)
         {
             ScanDlgFragment fragment = new ScanDlgFragment();
             fragment.Show(ChildFragmentManager.BeginTransaction(), "");
+            fragment.ResultEven += Fragment_ResultEven;
 
+        }
 
+        private async void Fragment_ResultEven(object sender, ScanDlgFragment.ResultEvenHandler e)
+        {
+            items.Clear();
+            if (e.Uid != null)
+            {
+                
+                var query = await CrossCloudFirestore.Current
+                    .Instance
+                    .Collection("Students")
+                    .Document(e.Uid.Trim()).GetAsync();
+
+                if (query.Exists)
+                {
+
+                    Student student = new Student();
+                    student = query.ToObject<Student>();
+                    student_id = student.Id;
+                    var data = await CrossCloudFirestore
+                        .Current
+                        .Instance
+                        .Collection("Reserved")
+                        .Document(student.Id)
+                        .Collection("Books")
+                        .GetAsync();
+                    counter = 0;
+                    if (!data.IsEmpty)
+                    {
+                        foreach (var item in data.Documents)
+                        {
+                            items.Add(item.Id);
+                            counter++;
+                        }
+                    }
+                    else
+                    {
+                        AndHUD.Shared.ShowError(context, "Book not found in reservation", MaskType.Clear, TimeSpan.FromSeconds(3));
+                    }
+                    txt_total_count.Text = $"TOTAL BOOKS: {counter}";
+                    ReserveAdapter adapter = new ReserveAdapter(items);
+                    recycler.SetAdapter(adapter);
+                    adapter.NotifyDataSetChanged();
+                    adapter.BtnClick += Adapter_BtnClick;
+                }
+
+            }
+            else
+            {
+                Console.WriteLine($"Reservation not found ");
+            }
+        }
+
+        private async void FindReservedBookd(String Uid)
+        {
+            items.Clear();
+            if (Uid != null)
+            {
+
+                var query = await CrossCloudFirestore.Current
+                    .Instance
+                    .Collection("Students")
+                    .Document(Uid.Trim()).GetAsync();
+
+                if (query.Exists)
+                {
+
+                    Student student = new Student();
+                    student = query.ToObject<Student>();
+                    student_id = student.Id;
+                    var data = await CrossCloudFirestore
+                        .Current
+                        .Instance
+                        .Collection("Reserved")
+                        .Document(student.Id)
+                        .Collection("Books")
+                        .GetAsync();
+                    counter = 0;
+                    if (!data.IsEmpty)
+                    {
+                        foreach (var item in data.Documents)
+                        {
+                            items.Add(item.Id);
+                            counter++;
+                        }
+                    }
+                    else
+                    {
+                        AndHUD.Shared.ShowError(context, "Book not found in reservation", MaskType.Clear, TimeSpan.FromSeconds(3));
+                    }
+                    txt_total_count.Text = $"TOTAL BOOKS: {counter}";
+                    ReserveAdapter adapter = new ReserveAdapter(items);
+                    recycler.SetAdapter(adapter);
+                    adapter.NotifyDataSetChanged();
+                    adapter.BtnClick += Adapter_BtnClick;
+                }
+
+            }
+            else
+            {
+                Console.WriteLine($"Reservation not found ");
+            }
         }
 
         private async void ImgSearchStudentId_Click(object sender, System.EventArgs e)
@@ -89,7 +191,7 @@ namespace Admin.Fragments
 
                 if (query.Exists)
                 {
-                    
+
                     Student student = new Student();
                     student = query.ToObject<Student>();
                     student_id = student.Id;
@@ -103,13 +205,13 @@ namespace Admin.Fragments
                     counter = 0;
                     if (!data.IsEmpty)
                     {
-                        
+
                         foreach (var item in data.Documents)
                         {
                             items.Add(item.Id);
                             counter++;
                         }
-                        
+
                     }
                     else
                     {
@@ -122,6 +224,7 @@ namespace Admin.Fragments
                     adapter.BtnClick += Adapter_BtnClick;
                 }
             }
+            
         }
 
         private async void Adapter_BtnClick(object sender, ReserveAdapterClickEventArgs e)
@@ -155,6 +258,6 @@ namespace Admin.Fragments
         }
 
 
-       
+
     }
 }

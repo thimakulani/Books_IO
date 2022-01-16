@@ -97,7 +97,6 @@ namespace Books_IO.Fragments
                 .Document(FirebaseAuth.Instance.Uid)
                 .GetAsync();
             Student student = data.ToObject<Student>();
-
             
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("BOOK.IO", "sigauquetk@gmail.com"));
@@ -118,7 +117,7 @@ namespace Books_IO.Fragments
             {
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                 client.Connect("smtp.gmail.com", 587);
-                client.Authenticate("sigauquetk@gmail.com", "22147674");
+                client.Authenticate("techs2280@gmail.com", "andries@M1998!");
                 await client.SendAsync(message);
             };
             AndHUD.Shared.ShowSuccess(context, "Soft copy has been sent to your email", MaskType.Clear, TimeSpan.FromSeconds(3));

@@ -24,7 +24,7 @@ using Context = Android.Content.Context;
 
 namespace Admin.Dialogs
 {
-    public class ScanDlgFragment : DialogFragment, IPermissionListener , IMultiplePermissionsListener//IResultHandler
+    public class ScanDlgFragment : DialogFragment, IPermissionListener , IMultiplePermissionsListener, IResultHandler
     {
         public override void OnCreate(Bundle savedInstanceState)
         {
@@ -50,7 +50,11 @@ namespace Admin.Dialogs
         TextView responce;
 
         string[] PERMISSIONS = { "android.permission.CAMERA" };
-
+        public event EventHandler<ResultEvenHandler> ResultEven;
+        public class ResultEvenHandler: EventArgs
+        {
+            public string Uid { get; set; }
+        }
         private void ConnectViews(View view)
         {
             scan_view = view.FindViewById<ZXingScannerView>(Resource.Id.scan_view);
@@ -85,7 +89,7 @@ namespace Admin.Dialogs
 
         public void OnPermissionGranted(PermissionGrantedResponse p0)
         {
-            scan_view.SetResultHandler(new MyResultsHandler(this));
+            scan_view.SetResultHandler(this);
             scan_view.StartCamera();
         }   
 
@@ -103,6 +107,13 @@ namespace Admin.Dialogs
             Toast.MakeText(this.Context,p0.ToString(), ToastLength.Long).Show();
         }
 
+        public void HandleResult(Result rawResult)
+        {
+            responce.Text = rawResult.Text;
+            ResultEven.Invoke(this, new ResultEvenHandler { Uid = rawResult.Text });
+            Dismiss();
+        }
+
         private class MyResultsHandler : IResultHandler
         {
 
@@ -116,6 +127,9 @@ namespace Admin.Dialogs
             public void HandleResult(Result rawResult)
             {
                 ScanDlgFragment.responce.Text = rawResult.Text;
+                Console.WriteLine(":::::::::::::::::::::::::::::::::::"+rawResult.Text);
+                ScanDlgFragment.ResultEven.Invoke(this, new ResultEvenHandler { Uid = rawResult.Text });
+                ScanDlgFragment.Dismiss();
             }
         }
     }
